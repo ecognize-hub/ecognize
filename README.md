@@ -49,10 +49,10 @@ Congratulations, your Django debug server is now serving Ecognize!
 
 ## Production deployment
 
-To perform a test deployment either on a server or on your local machine, perform the following steps:
+To perform a production deployment on an Internet-reachable server, perform the following steps:
 
 1. Unpack Ecognize or clone its git repository to the directory where you want to install Ecognize. I recommend `/var/www/ecognize`.
-2. Enter a DNS A record for the system where Ecognize should be deployed. Make sure that the DNS record has propagated into the global DNS before you continue. A working DNS A record is required for HTTPS autoconfiguration to work.
+2. Set a DNS A record for the system where Ecognize should be deployed. Make sure that the DNS record has propagated into the global DNS before you continue. A working DNS A record is required for HTTPS autoconfiguration to work.
 3. Execute the installer script: `sudo ./install.sh prod <hostname> <http|https>`. For example, to do an HTTPS deployment on the host `test.ecognize.org`, the command would be `sudo ./install.sh prod test.ecognize.org https`. To do an HTTP deployment on test2.ecognize.org, the command would be `sudo ./install.sh prod test2.ecognize.org http`.
 4. Add a MapBox API key to `global_static_resources/js/constants.js`. This is required for maps to work. To make sure that your MapBox API key will actually be used, you need to execute the `collectstatic` command (which will copy the file with the key from the global static source directory to the directory served by nginx): `sudo pipenv run python3 manage.py collectstatic -c --noinput`
 5. Add your e-mail configuration in the fields `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` in the file `project/settings.py`. This is required for registration links and other e-mails to work.
