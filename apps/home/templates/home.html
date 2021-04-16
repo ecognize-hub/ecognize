@@ -1,0 +1,103 @@
+{% extends 'base_nosidebar.html' %}
+
+{% block content %}
+<div class="row h-100 bg-dark pt-2">
+    <div class="col d-flex flex-column px-0">
+        <div class="row bg-dark text-white mx-0 px-5 my-1">
+            <div class="col text-center">
+                <h2>Ecognize</h2>
+                <h5>Ecognize is the first social network and collaboration platform for everybody working in or volunteering to help the planet: No matter if NGOs, law enforcement, academic researchers, intergovernmental organizations, or volunteers.</h5>
+            </div>
+        </div>
+        <div class="row flex-grow-1 no-gutters">
+            <div class="col text-left pt-3">
+                <div id="carouselExampleControls" class="carousel slide h-100" data-ride="carousel" data-pause="false" data-interval="7000">
+                  <div class="carousel-inner h-100">
+                    <div class="carousel-item active h-100 landing-slide-1">
+                        <div class="row d-flex flex-row justify-content-around">
+                            <div class="col-6 text-left mx-4 px-2 mt-5 py-3 text-white seethrough-textbox-dark">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <h3>For volunteers</h3>
+                                    </div>
+                                </div>
+                                <div class="row mb-4">
+                                    <div class="col">
+                                        <ul>
+                                            <li><strong>Report:</strong> Notify authorities and NGOs about environmental crimes and issues.</li>
+                                            <li><strong>Connect:</strong> Contact other volunteers and organizations in your area. Find friends and use the open forums for collaboration.</li>
+                                            <li><strong>Act:</strong> Find and organize events near you: cleanups, meetups, demonstrations, and many more.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row text-center justify-content-center mb-3">
+                                    <div class="col text-center d-flex flex-column justify-content-center">
+                                        <a href="{% url 'signup' %}"><button class="btn btn-primary">Sign up</button></a>
+                                    </div>
+                                    <div class="col text-center d-flex flex-column justify-content-center">
+                                        <a href="#"><button class="btn btn-primary">More info</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item h-100 landing-slide-2">
+                        <div class="row d-flex flex-row justify-content-around">
+                            <div class="col-6 text-left mx-4 px-2 mt-5 py-3 text-white seethrough-textbox-dark">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <h3>For professionals and researchers</h3>
+                                    </div>
+                                </div>
+                                <div class="row mb-4">
+                                    <div class="col">
+                                        <ul>
+                                            <li><strong>Cross-organization collaboration &amp; communication:</strong> Private and shared forums where different organizations can meet and exchange information. Both in the same sphere (e.g. all NGOs in one country) and of different types (e.g., NGOs and law enforcement).</li>
+                                            <li><strong>Volunteer outreach:</strong> Engage volunteers and recruit them for events or help.</li>
+                                            <li><strong>Reporting &amp; monitoring:</strong> Receive reports and intelligence from volunteers and local sources.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row text-center justify-content-center mb-3">
+                                    <div class="col text-center d-flex flex-column justify-content-center">
+                                        <a href="{% url 'signup' %}"><button class="btn btn-primary">Sign up</button></a>
+                                    </div>
+                                    <div class="col text-center d-flex flex-column justify-content-center">
+                                        <a href="#"><button class="btn btn-primary">More info</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <a class="carousel-control-prev text-dark" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next text-dark" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </div>
+            </div>
+        </div>
+        <div class="row no-gutters bg-dark text-white text-center justify-content-around">
+            <div class="col mx-0">
+                <div class="row mx-0">
+                    <div class="col mx-0">
+                        <a href="{% url 'imprint' %}">Imprint</a>
+                    </div>
+                </div>
+                <div class="row mx-0">
+                    <div class="col mx-0">
+                        <a href="{% url 'privacy-policy' %}">Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

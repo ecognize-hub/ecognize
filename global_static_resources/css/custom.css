@@ -1,0 +1,248 @@
+html,body {
+  height: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.w-75 {
+    width: 75%;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.dateinput-w-100 {
+    width: calc(100% - 40px);
+}
+
+.seethrough-textbox-dark{
+    background-color: rgba(52,58,64,0.8) !important;
+}
+
+.statball {
+    width: 132px !important;
+    height: 132px !important;
+}
+
+.h-100-wo-topnav {
+    height: calc(100% - 56px);
+}
+
+.min-100 {
+    min-height: 100%;
+}
+
+.opacity-0 {
+  opacity:0 !important;
+}
+.opacity-2 {
+  opacity:0.2 !important;
+}
+.opacity-4 {
+  opacity:0.4 !important;
+}
+.opacity-6 {
+  opacity:0.6 !important;
+}
+.opacity-8 {
+  opacity:.8 !important;
+}
+.opacity-10 {
+  opacity:1.0 !important;
+}
+
+label.required::after {
+    content: ' *';
+    color: red;
+}
+
+.pagination_page_link {
+  margin: 5px 5px;
+}
+
+.primary_sidenav_item::after {
+	content: '\002B';
+	font-weight: bold;
+	float: right;
+	color: #2CC469;
+}
+
+.primary_sidenav_item[aria-expanded="true"]::after {
+	content: "\2212";
+	font-weight: bold;
+}
+
+.secondary_sidenav_item{
+  padding-left: 20px;
+}
+
+.sidebar-width {
+    width: 170px;
+}
+
+.mapboxgl-marker {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border:1px solid gray;
+    background-color:red;
+}
+
+.img-wrap {
+    position: relative;
+}
+.img-wrap .close {
+    position: absolute;
+    top: 2px;
+    left: 24px;
+    z-index: 100;
+    font-weight: bold;
+    font-size: 40px;
+    color: red;
+}
+
+.verticalscroll {
+    overflow-y: auto;
+}
+
+.secondary_navbar li a {
+    font-size: small;
+}
+
+.fa-rotate-45 {
+    -ms-transform:rotate(45deg);     /* Internet Explorer 9 */
+    -webkit-transform:rotate(45deg); /* Chrome, Safari, Opera */
+    transform:rotate(45deg);         /* Standard syntax */
+}
+
+.fa-rotate-neg45 {
+    -ms-transform:rotate(-45deg);     /* Internet Explorer 9 */
+    -webkit-transform:rotate(-45deg); /* Chrome, Safari, Opera */
+    transform:rotate(-45deg);         /* Standard syntax */
+}
+
+.verticalscrollparent {
+    overflow: hidden;
+    height: 100%;
+}
+
+.block-tbody {
+  display: block;
+}
+
+.block-thead {
+  display: block;
+}
+
+.mh-0 {
+  min-height:0;
+}
+
+.mh-200 {
+  min-height: 200px;
+}
+
+.ck-editor__editable {
+    min-height: 150px;
+    max-height: 150px;
+    min-width: 400px;
+    max-width: 100% /*1000px;*/
+}
+/*Toolbar*/
+.ck-editor__top {
+    min-width: 400px;
+    max-width: 100% /*1000px;*/
+}
+
+.org-photo {
+    max-width: 100%;
+    max-height: 250px;
+}
+
+#report-table-container {
+  height: 100%;
+  display: flex;
+  flex-flow: row;
+  align-items: start;
+}
+
+/* for replacing the avatar prettily: */
+.img-container {
+  position: relative;
+  width: 100%;
+}
+
+.of-contain {
+    object-fit: contain;
+}
+
+.of-cover {
+    object-fit: cover;
+}
+
+.img-container img {
+  width: 240px;
+  height: 240px;
+}
+
+.thanksStatNumber:not(:empty)::after{
+    content: "\00a0Thanks\00a0\00a0|\00a0\00a0";
+}
+
+.img-container .btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.img-container .btn:hover {
+  background-color: black;
+}
+
+.landing-slide-1 {
+    background-image: url('/static/img/photos/volunteers.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.landing-slide-2 {
+    background-image: url('/static/img/photos/conservation_professionals.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.number-notification {
+  position: relative;
+  padding: 2px 4px 2px 4px;
+  background-color: red;
+  color: white;
+  font-family: arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 1px silver;
+}
+.fa .number-notification {
+  top: -0.8rem;
+  right: 0.5rem;
+}
+.fas .number-notification {
+  top: -0.8rem;
+  right: 0.5rem;
+}
+.far .number-notification {
+  top: -0.8rem;
+  right: 0.5rem;
+}

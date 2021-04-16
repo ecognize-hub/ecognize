@@ -1,0 +1,8 @@
+{% autoescape off %}
+Hi {{ name }},
+
+Please click on the link below to allow access for your organization to Ecognize:
+http://{{ domain }}{% url 'activate_org' uidb64=uid token=token %}
+
+Afterwards, you can create your personal account.
+{% endautoescape %}

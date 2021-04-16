@@ -1,0 +1,128 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+{% load countries %}
+{% get_countries as countries %}
+{% load crispy_forms_tags %}
+<script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/post.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/ckeditor.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/thread_pre.js' %}"></script>
+<div class="row">
+    <div class="col">
+        <h6><a href="{% url 'forum-details' thread.forum.id %}"><i class="fas fa-fw fa-arrow-left"></i>&nbsp;Back to {{ thread.forum }}</a></h6>
+    </div>
+</div>
+<div class="row pt-3 mt-3 mb-5 bg-light shadow border">
+    <div class="col h-100 d-flex flex-column">
+        <div class="row">
+            <div class="col">
+                <h4 class="ml-4 pl-4 pb-1">{{ thread.subject }}</h4>
+                <h6 class="ml-4 pl-4 pb-2 mt-3 mb-2"><i>Started {{ thread.started_timestamp }} by {{ thread.author }}</i></h6>
+                <input type="hidden" value="{{ thread.forum.id }}" id="id_thread_forum_id">
+            </div>
+        </div>
+        <div class="row flex-grow-1 flex-row d-flex verticalscroll">
+            <div class="col flex-grow-1 d-flex flex-column">
+                <div class="row px-3 flex-grow-1">
+                    <div class="col d-flex flex-column justify-content-start" id="posts_container"></div>
+                </div>
+                <div class="row mx-4 px-3 my-3 py-3 bg-white border shadow-sm"> <!-- edit field container -->
+                    <div class="col">
+                        <div class="row pb-3">
+                            <div class="col">
+                                <h5>Add new response:</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img alt="profile photo" class="border rounded-circle" src="/media/{{ current_user_profile.thumbnail }}" width="50" height="50" />
+                                    </div>
+                                </div>
+                                <input type="hidden" value="{{ current_user_profile.id }}" id="id_currentUserProfile_id">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        {{ current_user_profile.user.username }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col text-center">
+                                        ({{ current_user_profile.user.first_name }} {{ current_user_profile.user.last_name }})
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <form action="" method="post" id="id_form_sendMsg">
+                                    <div class="row">
+                                        <div class="col">
+                                            <textarea id="id_msg_textarea" rows="5" placeholder="Write your message here..."></textarea>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button class="btn btn-primary" type="submit">Send</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modals -->
+<div class="modal fade in" id="deletePostModal" tabindex="-1" role="dialog" aria-labelledby="deletePostModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deletePostModalLabel">Delete post?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row d-flex">
+              <div class="col d-flex">
+                  <p>Do you really want to delete this post? This action cannot be undone.</p>
+                  <input type="hidden" id="id_post_id"/>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, take me back</button>
+        <button type="button" id="id_btn_deletePost" class="btn btn-primary" data-dismiss="modal">Yes, delete this post</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="deleteThreadModal" tabindex="-1" role="dialog" aria-labelledby="deleteThreadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteThreadModalLabel">Delete whole thread?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row d-flex">
+              <div class="col d-flex">
+                  <p>Do you really want to delete this thread? This action cannot be undone.</p>
+                  <input type="hidden" id="id_thread_id" value=" {{ thread.id }}"/>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, take me back</button>
+        <button type="button" id="id_btn_deleteThread" class="btn btn-primary" data-dismiss="modal">Yes, delete this thread</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/thread_post.js' %}"></script>
+{% endblock %}

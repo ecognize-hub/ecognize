@@ -1,0 +1,1 @@
+[{"model": "profiles.userprofile", "pk": 1, "fields": {"user": 1, "type": "LAW", "country": "DE", "visible": true, "anyone_can_message": false, "reputation": 0, "num_reports": 0, "thanks": 0, "title": "Admin", "avatar": "defaults/default_avatar.png", "primary_org": 1, "email_confirmed": true, "bio": "Ecognize administrator"}}]

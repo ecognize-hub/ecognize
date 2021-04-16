@@ -1,0 +1,88 @@
+{% extends 'newreport_base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block newreportform %}
+<div class="row">
+    <div class="col-auto mr-3">
+        <a href="{% url 'report-create-choice' %}"><button class="btn btn-primary">&lt;&nbsp;Back</button></a>
+    </div>
+    <div class="col">
+        <div id="id_div_form_report">
+            <form method="post" name="new_report" id="id_form_new_report" action="">
+                <div class="form-row justify-content-center">
+                    {% csrf_token %}
+                    <div class="form-group col-10 col-xl-5 bg-light shadow mx-3 my-3 py-3">
+                        <div class="row">
+                            <div class="col">
+                                {{ form.category | as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                {{ form.description.label_tag }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form.description | append_attr:"style:width: 99%" | attr:"rows:6" }}
+                                {{ form.description.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-10 col-xl-5 mx-3">
+                        <div class="row bg-light shadow my-3 py-3">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                         Please copy the full address of the offending website here:*
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        {{ form.url | append_attr:"style:width: 95%" | append_attr:"placeholder:https://" }}
+                                        {{ form.url.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row bg-light shadow my-3 py-3">
+                            <div class="col">
+                                <div class="input-group date" id="id_datetimepicker" data-target-input="nearest">
+                                    {{ form.timestamp | attr:"data-target:#id_datetimepicker" | append_attr:"size:10" | add_class:"datepicker-input" }}
+                                    <div class="input-group-append" data-target="#id_datetimepicker" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                                {{ form.timestamp.errors }}
+                            </div>
+                        </div>
+                        <div class="row bg-light shadow mt-3 py-3">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        Enter security code:*
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <img id="id_captcha_image" alt="verification image">
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" size="6" id="id_captcha_value" name="captcha_value">
+                                        <input type="hidden" id="id_captcha_key" name="captcha_key">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-auto ml-3">
+        <button id="id_create_report" class="btn btn-primary">Next&nbsp;&gt;</button>
+    </div>
+</div>
+<script type="text/javascript" src="{% static 'js/newonlinereport_post.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,9 @@
+VOL,Volunteers
+NGO,Non-governmental organizations
+LAW,Law enforcement
+ACA,Academic institutions
+IGO,Intergovernmental organizations
+GOV,Government bodies
+JRN,Reporters/journalists
+COM,Commercial entities
+ANO,Anonymous contributors

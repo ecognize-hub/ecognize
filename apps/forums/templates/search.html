@@ -1,0 +1,80 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+<script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/threadpreview.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/search_pre.js' %}"></script>
+<div class="row">
+    <div class="col">
+        <h6><a href="{% url 'forum-details' forum.id %}"><i class="fas fa-fw fa-arrow-left"></i>&nbsp;Back to {{ forum }}</a></h6>
+        <input type="hidden" value="{{ forum.id }}" id="id_forum_id">
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col">
+        <form method="post" action="#">
+            <div class="row my-2">
+              <div class="col-3">
+                  <strong><label for="id_search_terms">Search terms</label></strong>
+              </div>
+              <div class="col">
+                  <input type="text" name="search_terms" id="id_search_terms" class="w-100">
+              </div>
+            </div>
+            <div class="row my-2">
+              <div class="col-3">
+                  <strong>Search mode</strong>
+              </div>
+              <div class="col">
+                  <input type="radio" name="search_mode" value="OR" id="id_search_mode_or" checked="checked">
+                  <label for="id_search_mode_or">Any search word</label>
+              </div>
+              <div class="col">
+                  <input type="radio" name="search_mode" value="AND" id="id_search_mode_and">
+                  <label for="id_search_mode_and">All search words</label>
+              </div>
+            </div>
+            <div class="row my-2">
+              <div class="col-3">
+                  <strong>Where to search</strong>
+              </div>
+              <div class="col">
+                  <input type="checkbox" name="search_field_title" id="id_search_field_title" value="title" checked="checked">
+                  <label for="id_search_field_title">Title</label>
+              </div>
+              <div class="col">
+                  <input type="checkbox" name="search_field_body" id="id_search_field_body" value="body" checked="checked">
+                  <label for="id_search_field_body">Posts' text</label>
+              </div>
+            </div>
+        </form>
+        <div class="row form-row">
+            <div class="col text-center">
+                <button type="submit" class="btn btn-primary" id="id_button_search" data-dismiss="modal">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row d-none mt-5" id="id_search_results_heading">
+    <div class="col">
+        <h4>Search results</h4>
+    </div>
+</div>
+<div class="row py-1 mt-3 px-3 mx-3 bg-dark text-white d-none" id="id_search_results_columns">
+    <div class="col">
+        <strong><i>Threads, creators and creation date</i></strong>
+    </div>
+    <div class="col-2">
+        <strong><i>Replies</i></strong>
+    </div>
+    <div class="col-4">
+        <strong><i>Last reply</i></strong>
+    </div>
+</div>
+<div class="row">
+    <div class="col" id="id_search_results_container">
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/search_post.js' %}"></script>
+{% endblock %}

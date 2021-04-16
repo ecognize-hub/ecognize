@@ -1,0 +1,6 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+    {% load crispy_forms_tags %}
+    {% crispy form form.helper %}
+{% endblock %}

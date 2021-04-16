@@ -1,0 +1,70 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+<script type="text/javascript" src="{% static 'js/addimages_pre.js' %}"></script>
+<div class="row">
+    <div class="col">
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'report-create-choice' %}">Step 1 of 3: Choose report type</a>
+            </li>
+            <li class="nav-item">
+                {% if report.images.content_type.id == type.report %}
+                <a id="id_second_step_link" class="nav-link" href="{% url 'report-edit' report.images.content_type.id report.id %}">Step 2 of 3: Create report</a>
+                {% endif %}
+                {% if report.images.content_type.id == type.onlinereport %}
+                <a id="id_second_step_link" class="nav-link" href="{% url 'onlinereport-edit' report.images.content_type.id report.id %}">Step 2 of 3: Create report</a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Step 3 of 3: Upload images</a>
+            </li>
+        </ul>
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col-auto mr-3">
+        {% if report.images.content_type.id == type.report %}
+        <a id="id_back_link" href="{% url 'report-edit' report.images.content_type.id report.id %}"><button class="btn btn-primary">&lt;&nbsp;Back</button></a>
+        {% endif %}
+        {% if report.images.content_type.id == type.onlinereport %}
+        <a id="id_finalize_link" href="{% url 'onlinereport-edit' report.images.content_type.id report.id %}"><button class="btn btn-primary">&lt;&nbsp;Back</button></a>
+        {% endif %}
+        <input type="hidden" value="{{ type.report }}" id="id_reportContentTypeId">
+        <input type="hidden" value="{{ type.onlinereport }}" id="id_onlineReportContentTypeId">
+        <input type="hidden" value="{{ authenticated }}" id="id_authenticated">
+    </div>
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                <h2>Add images for {{ report.images.content_type.name }} about {{report.get_category_display}} activity, handed in on {{report.creation_date}}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h4>Upload images:</h4>
+                <form id="uploadForm" action="{% url 'report-api-add-image' report.images.content_type.id report.id %}?format=json" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" id="id_input_object_id" name="object_id" value="{{ report.id }}">
+                    <input type="hidden" id="id_input_content_type" name="content_type" value="{{ report.images.content_type.id }}">
+                    <input name="image" id="id_input_image" type="file" value="">
+                    <button name="submit_image" id="submitBtn" value="Upload image" class="btn btn-primary">Upload image</button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <hr>
+                <h4>Images already uploaded:</h4>
+            </div>
+        </div>
+        <div class="row" id="imagecontainer" data-reportid="{{report.id}}">
+        </div>
+    </div>
+    <div class="col-auto ml-3">
+        <button class="btn btn-primary" id="id_btn_finalize">Finish&nbsp;&gt;</button>
+    </div>
+</div>
+<script type="text/javascript" src="{% static 'js/addimages_post.js' %}"></script>
+{% endblock %}

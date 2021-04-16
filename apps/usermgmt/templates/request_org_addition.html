@@ -1,0 +1,51 @@
+{% extends base_template_name %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script type="text/javascript" src="{% static 'js/choices.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/choices.min.css' %}"/>
+<script type="text/javascript" src="{% static 'js/request_org_addition_pre.js' %}"></script>
+<div class="row">
+  <div class="col mb-2">
+    <h2>Request access for a new organization</h2>
+    <p><i>In case your organization is not yet registered for Ecognize, please provide its details below and we will add it to the platform as soon as possible - usually within 3 days. We will inform you by e-mail once the organization has been added.</i></p>
+    <p><i>Any fields marked with a red asterisk (<span class="text-danger">*</span>) are mandatory. Move your mouse above the <i class="fas fa-fw fa-question-circle"></i> symbols for help.</i></p>
+  </div>
+</div>
+
+<form method="post" id="id-orgAdditionRequestForm">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col">
+        {{ form.non_field_errors }}
+      <table>
+        {% for field in form %}
+        <tr>
+            <th class="px-4 py-1 my-1">
+              {{ field.label_tag }}
+            </th>
+            <td class="px-4 py-1 my-1">
+              {{ field }}
+              {{ field.errors }}
+            </td>
+            <td>
+              {% if field.help_text %}
+                <span data-toggle="tooltip" data-placement="top" data-html="true" title="{{ field.help_text }}">
+                  <i class="fas fa-fw fa-question-circle"></i>
+                </span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+  <div class="row my-2 py-2">
+    <div class="col">
+      <button class="btn btn-primary" type="submit">Request organization access</button>
+    </div>
+  </div>
+</form>
+
+<script type="text/javascript" src="{% static 'js/request_org_addition_post.js' %}"></script>
+{% endblock %}

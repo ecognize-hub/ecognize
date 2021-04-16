@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block leftsidenav %}
+                            <li class="nav-item">
+                               <a class="nav-link primary_sidenav_item" data-toggle="collapse" href="#collapseReports"><i class="fas fa-fw fa-file-alt"></i>&nbsp;Reports</a>
+                            </li>
+                            <div class="collapse" id="collapseReports">
+                                <ul class="navbar-nav flex-column">
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'report-create-choice' %}"><i class="fas fa-fw fa-file-upload"></i>&nbsp;Submit report</a>
+                                    </li>
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'my-reports-list' %}"><i class="fas fa-fw fa-copy"></i>&nbsp;My submissions</a>
+                                    </li>
+                                </ul>
+                            </div>
+{% endblock %}

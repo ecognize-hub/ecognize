@@ -1,0 +1,203 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+{% load imagekit %}
+<script type="text/javascript" src="{% static 'js/mapbox-gl.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/mapbox-gl.css' %}"/>
+<script type="text/javascript" src="{% static 'js/map-functions.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/comment_thread.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/comment_post.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/reportdetail_pre.js' %}"></script>
+
+<div class="row">
+    <div class="col-6">
+        <div class="row">
+            <div class="col">
+                <h3>Report #{{ report.id }}</h3>
+                <input type="hidden" id="id_report_id" value="{{ report.id }}">
+                <input type="hidden" id="id_ctid_report" value=" {{ ctid }}">
+                <input type="hidden" id="id_ctid_report_comment" value=" {{ ctid_reportcomment }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <strong>Category</strong>
+            </div>
+            <div class="col">
+                {{ report.get_category_display }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <strong>Submitted on</strong>
+            </div>
+            <div class="col">
+                {{ report.timestamp }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <strong>Location type</strong>
+            </div>
+            <div class="col">
+                {{ report.get_location_type_display }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <strong>Location name</strong>
+            </div>
+            <div class="col">
+                {{ report.location_name }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <strong>Country</strong>
+            </div>
+            <div class="col">
+                {{ report.get_country_display }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <strong>Coordinates</strong>
+            </div>
+            <div class="col">
+                {{ report.geom.0 }},{{ report.geom.1 }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <strong>Description</strong>
+            </div>
+            <div class="col">
+                {{ report.description }}
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div id='map' style='width: 100%; height: 300px;'></div>
+        <input type="hidden" id="id_marker_url" value="{% static 'img/markers/map-marker-red.png' %}">
+        <input type="hidden" id="id_geomX" value="{{ report.geom.0 }}">
+        <input type="hidden" id="id_geomY" value="{{ report.geom.1 }}">
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="photos-tab" data-toggle="tab" href="#photos" role="tab" aria-controls="about" aria-selected="true">Photos</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="comments-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="stats" aria-selected="false">Comments</a>
+          </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="tab-content d-flex flex-grow-1 verticalscroll justify-content-center" id="myTabContent">
+          <div class="tab-pane fade show active w-75" id="photos" role="tabpanel" aria-labelledby="photos-tab">
+            <div class="row mt-2 pt-2" id="gallery">
+                {%  if photos|length == 0 %}
+                <div class="col">
+                    No photos provided by report author.
+                </div>
+                {%  endif %}
+                {% for photo in photos%}
+                <div class="col-12 col-sm-6 col-lg-3" data-toggle="modal" data-target="#imageDetailModal">
+                    <a href="#" data-image="{{ photo.image.url }}" data-target="#imgCarousel" data-slide-to="{{ forloop.counter0 }}">
+                        <img alt="report image" class="img-thumbnail" src="{{ photo.thumbnail.url }}"/>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+          </div>
+
+          <div class="tab-pane fade w-75" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+            <div class="row my-2 py-2">
+              <div class="col">
+                  <button class="btn btn-primary" data-toggle="modal" data-target="#writeNewCommentModal">New comment&nbsp;<i class="fas fa-fw fa-plus"></i></button>
+              </div>
+            </div>
+            <div class="row mt-2 pt-2 justify-content-center">
+                <div class="col" id="id_thread_container">
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade in" id="imageDetailModal" tabindex="-1" role="dialog" aria-labelledby="imageDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Image view</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="imgCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                {% for photo in photos%}
+                <li data-target="#imgCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %} class="active" {% endif %}></li>
+                {% endfor %}
+            </ol>
+          <div class="carousel-inner">
+              {% for photo in photos%}
+            <div class="carousel-item {% if forloop.first %} active {% endif %}">
+              <img alt="report image" class="d-block w-100" src="{{ photo.image.url }}">
+            </div>
+              {% endfor %}
+          </div>
+          <a class="carousel-control-prev" href="#imgCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#imgCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="writeNewCommentModal" tabindex="-1" role="dialog" aria-labelledby="writeNewCommentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="writeNewCommentModalLabel">Add new comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form>
+              <div class="form-row d-flex py-2">
+                  <div class="col flex-fill d-flex">
+                      <textarea class="d-flex flex-fill verticalscroll" id="id_post_textarea" rows="5" placeholder="Type your message here..."></textarea>
+                  </div>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Discard comment</button>
+        <button type="button" class="btn btn-primary" id="id_btn_postNewComment" data-dismiss="modal">Post comment</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="{% static 'js/reportdetail_post.js' %}"></script>
+{% endblock %}

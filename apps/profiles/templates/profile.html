@@ -1,0 +1,371 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+<script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/userpreview.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/profile_pre.js' %}"></script>
+<div class="row">
+    <div class="col-auto text-center justify-content-center mr-5">
+        <div class="img-container">
+            <img alt="avatar" src="/media/{{ profile.avatar }}" id="id_profile_avatar" class="rounded-circle border of-cover" width="240" height="240"/>
+            <button class="btn btn-primary d-none" id="id_btn_update_image">Update <i class="fas fa-camera"></i></button>
+            <input id="id_file_field" type="file" name="avatar" hidden/>
+            <input id="id_avatar_b64_input" type="text" name="avatar" hidden/>
+        </div>
+    </div>
+    <div class="col my-3 text-left">
+        <div class="row mb-2">
+            <div class="col">
+                <h2 class="my-auto">{{ profile.user }} {% if profile.user.first_name %} ({{ profile.user.first_name }} {{ profile.user.last_name }}) {% endif %}{% if is_me %}&nbsp;&nbsp;<span class="badge badge-secondary">You</span>{% endif %}</h2>
+                <h4 class="my-auto"><span id="id_profile_title">{% if profile.title %}{{ profile.title }}{% endif %}</span><input id="id_profile_title_input" name="title" type="text" class="d-none" {% if profile.title %}value="{{ profile.title }}" {% else %}placeholder="Title"{% endif %}></h4>
+                <h5 class="my-auto"><i>{% if profile.type == 'VOL' %}Volunteer{% elif profile.type == 'ANO' %}Anonymous contributor{% else %}Member of <a href="{% url 'org-detail' profile.primary_org.id %}">{{ profile.primary_org }}</a>{% endif %}</i></h5>
+                <input type="hidden" id="id_profile_id" value="{{ profile.id }}">
+                <input type="hidden" id="id_is_me" value="{{ is_me }}">
+            </div>
+            <div class="col-auto text-right">
+                {% if is_friend %}
+                <div class="row my-2">
+                    <div class="col">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#deleteConnectionModal">Remove contact&nbsp;<i class="fas fa-user-minus"></i></button>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#startNewConvoModal">Message&nbsp;<i class="far fa-envelope"></i></button>
+                    </div>
+                </div>
+                {% else %}
+                    {% if not is_me %}
+                        {% if allows_msg %}
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#startNewConvoModal">Message&nbsp;<i class="far fa-envelope"></i></button>
+                        {% endif %}
+                        {% if sent_them_req %}
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#deleteConnectionRequestModal">Abort connection request&nbsp;<i class="fas fa-user-minus"></i></button>
+                        {% elif received_req_from_them %}
+                            <div class="row my-2">
+                                <div class="col">
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#acceptConnectionModal">Accept connection request&nbsp;<i class="fas fa-user-plus"></i></button><br/>
+                                </div>
+                            </div>
+                            <div class="row my-2">
+                                <div class="col">
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#deleteConnectionRequestModal">Delete connection request&nbsp;<i class="fas fa-user-minus"></i></button>
+                                </div>
+                            </div>
+                        {% else %}
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#addUserAsConnectionModal">Add friend&nbsp;<i class="fas fa-user-plus"></i></button>
+                        {% endif %}
+                    {% else %}
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn btn-primary" id="id_button_edit">Edit profile&nbsp;<i class="fas fa-user-edit"></i></button>
+                                </div>
+                            </div>
+                            <div class="row ml-2">
+                                <div class="col">
+                                    <button class="btn btn-primary d-none" id="id_button_save_profile">Save profile&nbsp;<i class="far fa-save"></i></button>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    <button class="btn btn-secondary d-none" id="id_button_abort_edit_profile">Cancel editing&nbsp;<i class="fas fa-undo"></i></button>
+                                </div>
+                            </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-left">
+                <div class="row my-2">
+                    <div class="col-3">
+                        <strong>Country</strong>
+                    </div>
+                    <div class="col-9">
+                        {{ profile.get_country_display }}
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-3">
+                        <strong>Occupation</strong>
+                    </div>
+                    <div class="col-9">
+                        {{ profile.get_type_display }}
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-3">
+                        <strong>Contacts</strong>
+                    </div>
+                    <div class="col-9">
+                        {{ num_friends }}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="true">About</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false">Statistics &amp; ranking</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="connections-tab" data-toggle="tab" href="#connections" role="tab" aria-controls="connections" aria-selected="false">Contacts</a>
+          </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="tab-content d-flex flex-grow-1 verticalscroll justify-content-center" id="myTabContent">
+          <div class="tab-pane fade show active w-75" id="about" role="tabpanel" aria-labelledby="about-tab">
+            <div class="row mt-2 pt-2">
+              <div class="col">
+                  <p id="id_profile_bio">{{ profile.bio }}</p><textarea id="id_profile_bio_input" rows="5" name="bio" class="d-none w-100" {% if not profile.bio %}placeholder="About you"{% endif %}>{% if profile.bio %}{{ profile.bio }}{% endif %}</textarea>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade show w-75" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+            <div class="row justify-content-between">
+                <div class="col-auto text-center rounded-circle bg-secondary my-3 px-2 py-3 statball">
+                    <div class="row">
+                        <div class="col">
+                            <h4><i class="fas fa-globe-americas"></i></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            0
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Global rank
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto text-center rounded-circle bg-secondary my-3 px-2 py-3 statball">
+                    <div class="row">
+                        <div class="col">
+                            <h4><i class="far fa-flag"></i></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            0
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            National rank
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto text-center rounded-circle bg-secondary my-3 px-2 py-3 statball">
+                    <div class="row">
+                        <div class="col">
+                            <h4><i class="far fa-star"></i></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            {{ profile.reputation }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Reputation
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto text-center rounded-circle bg-secondary my-3 px-2 py-3 statball">
+                    <div class="row">
+                        <div class="col">
+                            <h4><i class="fas fa-file-alt"></i></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            {{ profile.num_reports }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Reports
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto text-center rounded-circle bg-secondary my-3 px-2 py-3 statball">
+                    <div class="row">
+                        <div class="col">
+                            <h4><i class="far fa-handshake"></i></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            {{ profile.thanks }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Thanks
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="tab-pane fade w-75" id="connections" role="tabpanel" aria-labelledby="connections-tab">
+            <div class="row mt-2 pt-2 justify-content-center" id="id_connections_container">
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<!-- modals -->
+
+<div class="modal fade in" id="addUserAsConnectionModal" tabindex="-1" role="dialog" aria-labelledby="addUserAsConnectionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addUserAsConnectionModalLabel">Request user connection?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row d-flex">
+              <div class="col d-flex">
+                  <p>Do you really want to send this user a connection request? If so, you can choose to add a note for the recipient:</p>
+              </div>
+          </div>
+          <form>
+              <div class="form-row d-flex">
+                  <div class="col d-flex">
+                      <textarea class="d-flex flex-fill verticalscroll" id="id_msg_textarea" rows="5" placeholder="Type your note here..."></textarea>
+                  </div>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, take me back</button>
+        <button type="button" class="btn btn-primary" id="id_btn_performConnectionRequest" data-dismiss="modal">Send connection request</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="deleteConnectionModal" tabindex="-1" role="dialog" aria-labelledby="deleteConnectionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConnectionModalLabel">Remove from connections?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row d-flex">
+              <div class="col d-flex">
+                  <p>Do you really want to remove this user from your connections?</p>
+                  <input type="hidden" id="id_connection_id"/>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, take me back</button>
+        <button type="button" class="btn btn-primary" id="id_btn_performDeleteConnection" data-dismiss="modal">Yes, remove from connections</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="acceptConnectionModal" tabindex="-1" role="dialog" aria-labelledby="acceptConnectionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="acceptConnectionModalLabel">Connect?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row d-flex">
+              <div class="col d-flex">
+                  <p>Do you want to accept this request to connect?</p>
+                  <input type="hidden" id="id_accept_id"/>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, take me back</button>
+        <button type="button" class="btn btn-primary" id="id_btn_performAcceptConnectionRequest" data-dismiss="modal">Yes, accept request to connect!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="deleteConnectionRequestModal" tabindex="-1" role="dialog" aria-labelledby="deleteConnectionRequestModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConnectionRequestModalLabel">Delete request to connect?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row d-flex">
+              <div class="col d-flex">
+                  <p>Do you really want to delete this request to connect?</p>
+                  <input type="hidden" id="id_request_id"/>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, take me back</button>
+        <button type="button" class="btn btn-primary" id="id_btn_performDeleteConnectionRequest" data-dismiss="modal">Yes, delete connection request</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="startNewConvoModal" tabindex="-1" role="dialog" aria-labelledby="startNewConvoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="startNewConvoModalLabel">Message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form>
+              <div class="form-row d-flex py-2">
+                  <div class="col flex-fill d-flex">
+                      <input type="text" placeholder="Subject" class="w-100" id="id_subject_input">
+                  </div>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Discard</button>
+        <button type="button" id="id_btn_startThread" class="btn btn-primary" data-dismiss="modal">Start conversation</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/profile_post.js' %}"></script>
+{% if is_me %}
+<script type="text/javascript" src="{% static 'js/profile_edit.js' %}"></script>
+{% endif %}
+{% endblock %}

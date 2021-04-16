@@ -1,0 +1,380 @@
+{% extends base_template_name %}
+
+{% block content %}
+{% load static %}
+<script type="text/javascript" src="{% static 'js/choices.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/choices.min.css' %}"/>
+<script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/folder.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/file.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/files_pre.js' %}"></script>
+
+<div class="row h-100">
+    <div class="col">
+        <div class="row pt-4">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <h4>Folder browser: {{ folder_name }}</h4>
+                        <input type="hidden" id="id_root_folder" value="{{ folder_id }}">
+                    </div>
+                    <div class="col-auto only-own-files">
+                        <a href="#" data-toggle="modal" data-target="#uploadNewFileModal" data-id="{{ folder_id }}" data-type="file"><button class="btn btn-primary">Share new file <i class="fas fa-fw fa-plus"></i></button></a>
+                    </div>
+                    <div class="col-auto only-own-files">
+                        <a href="#" data-toggle="modal" data-target="#newFolderModal" data-id="{{ folder_id }}" data-type="folder"><button class="btn btn-primary">Create new folder <i class="fas fa-fw fa-plus"></i></button></a>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-auto"></div>
+                    <div class="col"><h5>Name</h5></div>
+                    <div class="col-4"><h5>Last modified</h5></div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <hr/>
+                    </div>
+                </div>
+                <div class="row h-100">
+                    <div class="col verticalscroll">
+                        <div class="row">
+                            <div class="col" id="id_div_subfolders_0"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col verticalscroll" id="id_div_files_0"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto d-none" id="id_div_filesystemobj_info_hidden">
+                <h4><a href="#" id="id_link_show_filesystemobj_info"><i title="Show file/folder info" class="fas fa-fw fa-chevron-left"></i><i title="Show file/folder info" class="fas fa-fw fa-info-circle"></i></a></h4>
+            </div>
+            <div class="col-5" id="id_div_filesystemobj_info">
+                <div class="row">
+                    <div class="col">
+                        <h4>File/folder information &nbsp;<a href="#" id="id_link_hide_filesystemobj_info"><i title="Hide file/folder info" class="fas fa-fw fa-chevron-right"></i></a></h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <strong>Name:</strong>
+                    </div>
+                    <div class="col-8">
+                        <span data-label="name"></span><span data-label="file" data-translator="extractFileName"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <strong>Owner:</strong>
+                    </div>
+                    <div class="col-8">
+                        <span data-label="owner" data-translator="getLinkedUserName" data-escape="false"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <strong>Created:</strong>
+                    </div>
+                    <div class="col-8">
+                        <span data-label="time_created" data-translator="prettyPrintDateTime"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <strong>Last edited:</strong>
+                    </div>
+                    <div class="col-8">
+                        <span data-label="time_last_edited" data-translator="prettyPrintDateTime"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <strong>Last edited by:</strong>
+                    </div>
+                    <div class="col-8">
+                        <span data-label="last_edited_by" data-translator="getLinkedUserName" data-escape="false"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <hr/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <h5>Actions</h5>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-2 file-action folder-action needs-write-action needs-ownership-action d-none">
+                        <a class="action-button" href="#" data-toggle="modal" data-target="#deleteObjModal" id="id_a_deleteObj"><h4><i title="Delete" class="fas fa-fw fa-trash-alt"></i></h4>Delete</a>
+                    </div>
+                    <div class="col-2 file-action folder-action needs-write-action needs-ownership-action d-none">
+                        <a class="action-button" href="#" data-toggle="modal" data-target="#shareObjModal" id="id_a_shareObj"><h4><i title="Share" class="fas fa-fw fa-share"></i></h4>Share</a>
+                    </div>
+                    <div class="col-2 folder-action needs-write-action needs-ownership-action d-none">
+                        <a class="action-button" href="#" data-toggle="modal" data-target="#renameObjModal" id="id_a_renameObj" data-type="folder"><h4><i title="Rename" class="fas fa-fw fa-edit"></i></h4>Rename</a>
+                    </div>
+                    <div class="col-2 file-action d-none">
+                        <a class="action-button" href="#" target="_blank" data-type="file" id="id_a_downloadFile"><h4><i title="Download" class="fas fa-fw fa-file-download"></i></h4>Download</a>
+                    </div>
+                    <div class="col-2 file-action needs-write-action d-none">
+                        <a class="action-button" href="#" data-toggle="modal" data-target="#uploadReplaceFileModal" id="id_a_uploadReplaceFile" data-type="file"><h4><i title="Upload new version" class="fas fa-fw fa-file-upload"></i></h4>Update</a>
+                    </div>
+                    <div class="col-2 folder-action needs-write-action d-none">
+                        <a class="action-button" href="#" data-toggle="modal" data-target="#uploadNewFileModal" id="id_a_uploadNewFile" data-type="folder"><h4><i title="Upload new file in this folder" class="fas fa-fw fa-file-upload"></i></h4>Upload</a>
+                    </div>
+                    <div class="col-2 folder-action needs-write-action d-none">
+                        <a class="action-button" href="#" data-toggle="modal" data-target="#newFolderModal" id="id_a_newFolder" data-type="folder"><h4><i title="Create new subfolder in this folder" class="fas fa-folder-plus"></i></h4>New subfolder</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <hr/>
+                    </div>
+                </div>
+                <div class="row only-own-files">
+                    <div class="col-4">
+                        <h5>Share settings</h5>
+                    </div>
+                    <div class="col-8">
+                        <a id="id_editShareSettingsButton" href="#" data-toggle="modal" data-target="#shareObjModal"><i title="Edit share settings" class="fas fa-fw fa-edit"></i></a>
+                    </div>
+                </div>
+                <div class="row pt-2 pb-1 only-own-files">
+                    <div class="col">
+                        <h6>Users</h6>
+                    </div>
+                </div>
+                <div class="row only-own-files">
+                    <div class="col-4">
+                        <strong>Read access:</strong>
+                    </div>
+                    <div class="col-8">
+                        <span data-label="users_read" data-translator="getLinkedUsersAsCSV" data-escape="false"></span>
+                    </div>
+                </div>
+                <div class="row only-own-files">
+                    <div class="col-4">
+                        <strong>Write access:</strong>
+                    </div>
+                    <div class="col-8">
+                        <span data-label="users_write" data-translator="getLinkedUsersAsCSV" data-escape="false"></span>
+                    </div>
+                </div>
+                <div class="row pt-4 pb-1 only-own-files">
+                    <div class="col">
+                        <h6>Organizations</h6>
+                    </div>
+                </div>
+                <div class="row only-own-files">
+                    <div class="col-4">
+                        <strong>Read access:</strong>
+                    </div>
+                    <div class="col-8">
+                        <span data-label="orgs_read" data-translator="getLinkedOrgsAsCSV" data-escape="false"></span>
+                    </div>
+                </div>
+                <div class="row only-own-files">
+                    <div class="col-4">
+                        <strong>Write access:</strong>
+                    </div>
+                    <div class="col-8">
+                        <span data-label="orgs_write" data-translator="getLinkedOrgsAsCSV" data-escape="false"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modals -->
+<div class="modal fade in" id="deleteObjModal" tabindex="-1" role="dialog" aria-labelledby="deleteObjModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteObjModalLabel">Delete <span id="id_delete-modal_header_type"></span>?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <p>Do you really want to delete the <span id="id_delete-modal_body_type"></span> &quot;<span id="id_del_current_name"></span>&quot;? This action cannot be undone.</p>
+          <input type="hidden" id="id_input_object_id_del"><input type="hidden" id="id_input_object_type_del">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="id_button_delete">Yes, delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="shareObjModal" tabindex="-1" role="dialog" aria-labelledby="shareObjModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shareObjModalLabel">Change share settings</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form id="id_form_shareSettings">
+              <div class="row text-center">
+                  <div class="col-2">
+                  </div>
+                  <div class="col-5">
+                      <h5>Users</h5>
+                  </div>
+                  <div class="col-5">
+                      <h5>Organizations</h5>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-2">
+                      <h5>Read</h5>
+                  </div>
+                  <div class="col-5">
+                      <select class="form-control" name="users_read" id="choices-users-read" multiple="multiple"></select>
+                  </div>
+                  <div class="col-5">
+                      <select class="form-control" name="users_write" id="choices-orgs-read" multiple="multiple"></select>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-2">
+                      <h5>Write</h5>
+                  </div>
+                  <div class="col-5">
+                      <select class="form-control" name="orgs_read" id="choices-users-write" multiple="multiple"></select>
+                  </div>
+                  <div class="col-5">
+                      <select class="form-control" name="orgs_write" id="choices-orgs-write" multiple="multiple"></select>
+                  </div>
+              </div>
+          </form>
+          <input type="hidden" id="id_input_object_id_share"><input type="hidden" id="id_input_object_type_share">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="id_button_share">Share</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="renameObjModal" tabindex="-1" role="dialog" aria-labelledby="renameObjModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="renameObjModalLabel">Rename object</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+              <div class="col">
+                  <strong>Current name</strong>
+              </div>
+              <div class="col" id="id_p_current_name">
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-auto">
+                  <strong><label for="div_input_folder_name">New name</label></strong>
+              </div>
+              <div class="col">
+                  <input name="name" id="div_input_folder_name" type="text">
+              </div>
+          </div>
+          <input type="hidden" id="id_input_object_id_rename"><input type="hidden" id="id_input_object_type_rename">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="id_button_rename">Rename</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="newFolderModal" tabindex="-1" role="dialog" aria-labelledby="newFolderModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newFolderModalLabel">Create new folder</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+              <div class="col">
+                  Create new folder<span id="id_newFolder_parentFolderName"></span>:
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-auto">
+                  <strong><label for="div_input_newFolder_name">New name</label></strong>
+              </div>
+              <div class="col">
+                  <input name="name" id="div_input_newFolder_name" type="text">
+              </div>
+          </div>
+          <input type="hidden" id="id_input_object_id_newFolder"><input type="hidden" id="id_input_object_type_newFolder">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="id_button_createFolder">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="uploadReplaceFileModal" tabindex="-1" role="dialog" aria-labelledby="uploadReplaceFileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadReplaceFileModalLabel">Upload &amp; replace file</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <p>Upload new file to replace &quot;<span id="id_uploadReplace_oldFileName"></span>&quot;:</p>
+          <input type="file" id="id_fileinput_replace">
+          <input type="hidden" id="id_input_object_id_uploadReplace"><input type="hidden" id="id_input_object_type_uploadReplace">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="id_button_uploadReplaceFile" data-dismiss="modal">Upload &amp; replace old file</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="uploadNewFileModal" tabindex="-1" role="dialog" aria-labelledby="uploadNewFileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadNewFileModalLabel">Upload new file</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <p>Upload new file<span id="id_uploadNew_parentFolderName"></span>:</p>
+          <input type="file" id="id_fileinput_new">
+          <input type="hidden" id="id_input_object_id_uploadNew"><input type="hidden" id="id_input_object_type_uploadNew">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="id_button_uploadNewFile">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/folder_post.js' %}"></script>
+{% endblock %}

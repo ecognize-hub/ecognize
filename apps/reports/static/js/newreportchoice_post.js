@@ -1,0 +1,1 @@
+document.getElementById("id_btn_proceed").addEventListener("click", function(e){ location.href=document.querySelectorAll('input:checked')[0].value; });

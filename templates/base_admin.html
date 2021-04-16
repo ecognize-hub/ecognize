@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block leftsidenav %}
+                            <li class="nav-item">
+                               <a class="nav-link primary_sidenav_item" data-toggle="collapse" href="#collapseReports"><i class="fas fa-fw fa-file-alt"></i>&nbsp;Reports</a>
+                            </li>
+                            <div class="collapse" id="collapseReports">
+                                <ul class="navbar-nav flex-column">
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'view-reports-search' %}"><i class="fas fa-fw fa-search"></i>&nbsp;Search</a>
+                                    </li>
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'report-create-choice' %}"><i class="fas fa-fw fa-file-upload"></i>&nbsp;Submit report</a>
+                                    </li>
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'my-reports-list' %}"><i class="fas fa-fw fa-copy"></i>&nbsp;My submissions</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <li class="nav-item">
+                                <a class="nav-link primary_sidenav_item" data-toggle="collapse" href="#collapseEvents"><i class="fas fa-fw fa-fist-raised"></i>&nbsp;Actions &amp; events</a>
+                            </li>
+                            <div class="collapse" id="collapseEvents">
+                                <ul class="navbar-nav flex-column">
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'view-events-national-search' %}"><i class="fas fa-fw fa-search"></i>&nbsp;Search</a>
+                                    </li>
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'view-events-mine-list' %}"><i class="fas fa-fw fa-calendar-alt"></i>&nbsp;My calendar</a>
+                                    </li>
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'view-events-create' %}"><i class="far fa-fw fa-calendar-plus"></i>&nbsp;Create event</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <li class="nav-item">
+                               <a class="nav-link primary_sidenav_item" data-toggle="collapse" href="#collapseRankings"><i class="fas fa-fw fa-trophy"></i>&nbsp;Rankings</a>
+                            </li>
+                            <div class="collapse" id="collapseRankings">
+                                <ul class="navbar-nav flex-column">
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'global-userrankinglist' %}"><i class="fas fa-fw fa-globe-americas"></i>&nbsp;Global</a>
+                                    </li>
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'national-userrankinglist' %}"><i class="far fa-fw fa-flag"></i>&nbsp;National</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'connections-overview' %}"><i class="fas fa-fw fa-user-friends"></i>&nbsp;Contacts</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link primary_sidenav_item" data-toggle="collapse" href="#collapseGroupsAndOrgs"><i class="fas fa-fw fa-users"></i>&nbsp;Groups & Organizations</a>
+                            </li>
+                            <div class="collapse" id="collapseGroupsAndOrgs">
+                                <ul class="navbar-nav flex-column">
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'org-search' %}"><i class="fas fa-fw fa-building"></i>&nbsp;Organizations</a>
+                                    </li>
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'group-search' %}"><i class="fas fa-fw fa-users"></i>&nbsp;Groups</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'forums-all' %}"><i class="fas fa-fw fa-comments"></i>&nbsp;Forums</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'files-mine' %}"><i class="fas fa-fw fa-folder"></i>&nbsp;File exchange</a>
+                            </li>
+                            <li>
+                                <a class="nav-link primary_sidenav_item" href="#collapseAdmin" data-toggle="collapse"><i class="fas fa-users-cog"></i>&nbsp;Admin</a>
+                            </li>
+                            <div class="collapse" id="collapseAdmin">
+                                <ul class="navbar-nav flex-column">
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'req-org-addition-admin' %}"><i class="fas fa-fw fa-building"></i>&nbsp; Org join requests</a>
+                                    </li>
+                                    <li class="nav-item secondary_sidenav_item">
+                                        <a class="nav-link" href="{% url 'org-admins' %}"><i class="fas fa-fw fa-crown"></i>&nbsp;Org admins</a>
+                                    </li>
+                                </ul>
+                            </div>
+{% endblock %}

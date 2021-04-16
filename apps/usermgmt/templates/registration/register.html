@@ -1,0 +1,95 @@
+{% extends base_template_name %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script type="text/javascript" src="{% static 'js/choices.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/choices.min.css' %}"/>
+<div class="row">
+  <div class="col mb-2">
+    <h2>Sign up</h2>
+      <i>Any fields marked with a red asterisk (<span class="text-danger">*</span>) are mandatory. Move your mouse above the <i class="fas fa-fw fa-question-circle"></i> symbols for help.</i>
+  </div>
+</div>
+<form method="post">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col">
+        {{ user_form.non_field_errors }}
+      <table>
+        {% for field in user_form.visible_fields %}
+        <tr>
+            <th class="px-4 py-1 my-1">
+              {{ field.label_tag }}
+            </th>
+            <td class="px-4 py-1 my-1">
+              {{ field }}
+              {{ field.errors }}
+            </td>
+            <td>
+              {% if field.help_text %}
+                <span data-toggle="tooltip" data-placement="top" data-html="true" title="{{ field.help_text }}">
+                  <i class="fas fa-fw fa-question-circle"></i>
+                </span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+    <div class="col">
+        {{ profile_form.non_field_errors }}
+      <table>
+        {% for field in profile_form.visible_fields %}
+        <tr>
+            <th class="px-4 py-1 my-1">
+              {{ field.label_tag }}
+            </th>
+            <td class="px-4 py-1 my-1">
+              {{ field }}
+              {{ field.errors }}
+            </td>
+            <td>
+              {% if field.help_text %}
+                <span data-toggle="tooltip" data-placement="top" data-html="true" title="{{ field.help_text }}">
+                  <i class="fas fa-fw fa-question-circle"></i>
+                </span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+        {% for hidden in profile_form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        <i>Your organization is not listed? <a href="{% url 'req-org-addition' %}">Request access for your organization.</a></i>
+    </div>
+  </div>
+    <div class="row">
+        <div class="col">
+            <hr/>
+        </div>
+    </div>
+  <div class="row justify-content-center">
+      <div class="col-auto">
+          <div class="row">
+              <div class="col-auto">
+                  <label class="required">
+                      <input type="checkbox" name="terms">
+                      I have read, understood and accept Ecognize's <a href="{% url 'terms-and-conditions' %}" target="_blank">terms and conditions</a>
+                  </label><br/>
+                  <label class="required">
+                      <input type="checkbox" name="privacy">
+                      I have read, understood and accept Ecognize's <a href="{% url 'privacy-policy' %}" target="_blank">privacy policy</a>
+                  </label><br/>
+              </div>
+          </div>
+          <div class="row text-center justify-content-center">
+              <div class="col-auto text-center justify-content-center">
+                  <button class="btn btn-primary" type="submit">Sign up</button>
+              </div>
+          </div>
+      </div>
+  </div>
+</form>
+<script type="text/javascript" src="{% static 'js/register_post.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,40 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pip = "*"
+djangorestframework = "*"
+djangorestframework-gis = "*"
+psycopg2 = "*"
+Pillow = "*"
+django-countries = "*"
+django-leaflet = "*"
+django-select2 = "*"
+django-crispy-forms = "*"
+reverse-geocode = "*"
+django-crum = "*"
+django-multiselectfield = "*"
+pytz = "*"
+django-imagekit = "*"
+django-widget-tweaks = "*"
+django-simple-captcha = "==0.5.12"
+django-ckeditor = "*"
+bleach = "*"
+djangorestframework-simplejwt = "*"
+python-magic = "*"
+django-js-reverse = "*"
+django-csp = "*"
+django-cprofile-middleware = "*"
+django-rest-captcha = "*"
+django = ">=3.1.4"
+gunicorn = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true

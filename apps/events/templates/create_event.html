@@ -1,0 +1,134 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+{% load countries %}
+{% get_countries as countries %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+<script type="text/javascript" src="{% static 'js/mapbox-gl.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/mapbox-gl.css' %}"/>
+<script src="{% static 'js/mapbox-gl-geocoder.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/mapbox-gl-geocoder.css' %}" type="text/css"/>
+<script type="text/javascript" src="{% static 'js/choices.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/choices.min.css' %}"/>
+<script type="text/javascript" src="{% static 'js/map-functions.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/tempusdominus-bootstrap-4.min.css' %}"/>
+
+<div class="row d-flex flex-row">
+        <form class="flex-grow-1" method="post" name="new_report" id="id_form_new_report" action="#">
+                <div class="col flex-grow-1" id="div_form_new_event">
+                    {% csrf_token %}
+                    <div class="row form-row my-2">
+                        <div class="col-3 col-xl-2">
+                            <strong>Title</strong>
+                        </div>
+                        <div class="col-9 col-xl-10">
+                            {{ form.title }}
+                        </div>
+                    </div>
+                    <div class="row form-row my-2">
+                        <div class="col-3 col-xl-2">
+                            <strong>Category</strong>
+                        </div>
+                        <div class="col-9 col-xl-10">
+                            {{ form.category }}
+                        </div>
+                    </div>
+                    <div class="row form-row my-2">
+                        <div class="col-3 col-xl-2">
+                            <strong>Privacy</strong>
+                        </div>
+                        <div class="col-9 col-xl-10">
+                            {{ form.public }}
+                        </div>
+                    </div>
+                    <div class="row form-row my-2">
+                        <div class="col-3 col-xl-2">
+                            <strong>Start &amp; end</strong>
+                        </div>
+                        <div class="col-4">
+                            <div class="input-group date" id="startdatetimepicker" data-target-input="nearest">
+                                {{ form.datetime_start | attr:"data-target:#startdatetimepicker" | add_class:"datetimepicker-input" }}
+                                <div class="input-group-append" data-target="#startdatetimepicker" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            -
+                        </div>
+                        <div class="col-4">
+                            <div class="input-group date" id="enddatetimepicker" data-target-input="nearest">
+                                {{ form.datetime_end | attr:"data-target:#enddatetimepicker" | add_class:"datetimepicker-input" }}
+                                <div class="input-group-append" data-target="#enddatetimepicker" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-row my-2">
+                        <div class="col-3 col-xl-2">
+                            <strong>Description</strong>
+                        </div>
+                        <div class="col-9 col-xl-10">
+                            {{ form.description | add_class:"w-100" }}
+                        </div>
+                    </div>
+                    <div class="row form-row my-2">
+                        <div class="col-3 col-xl-2">
+                            <strong>Invitee management</strong>
+                        </div>
+                        <div class="col-4">
+                            {{ form.cohosts | as_crispy_field }}
+                        </div>
+                        <div class="col">
+                        </div>
+                        <div class="col-4">
+                            {{ form.invited | as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row form-row my-2">
+                        <div class="col-3 col-xl-2">
+                            <strong>Online</strong>
+                        </div>
+                        <div class="col-9 col-xl-10">
+                            {{ form.online }}
+                        </div>
+                    </div>
+                    <div class="row form-row my-2 d-none" id="online_address_container">
+                        <div class="col-3 col-xl-2">
+                            <strong>Web address</strong>
+                        </div>
+                        <div class="col-9 col-xl-10">
+                            {{ form.online_address | add_class:"w-75" }}
+                        </div>
+                    </div>
+                    <div class="row form-row my-2" id="offline_address_container">
+                        <div class="col-3 col-xl-2">
+                            <strong>Location</strong>
+                        </div>
+                        <div class="col-9 col-xl-10">
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.address | add_class:"w-75" }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.geom | as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-row my-4">
+                        <div class="col text-center">
+                            <button class="btn btn-primary">{{ mode_button }}</button>
+                        </div>
+                    </div>
+                </div>
+        </form>
+</div>
+
+<script type="text/javascript" src="{% static 'js/create_event_post.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,28 @@
+<div class="row py-4" id="{{ domId }}">
+    <div class="col px-4">
+        <div class="border rounded border-secondary px-2 py-1 bg-light">
+            <div class="row">
+                <div class="col">
+                    {{ msg.content }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <small>{{ sent_timestamp }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-auto text-center">
+        <div class="row">
+            <div class="col">
+                 <img alt="avatar" class="border rounded-circle" src="{{ msg.sender.thumbnail }}" width="50" height="50" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                 {{ msg.sender.name }}
+            </div>
+        </div>
+    </div>
+</div>

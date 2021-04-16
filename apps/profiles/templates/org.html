@@ -1,0 +1,106 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+<script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/userpreview.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/org_pre.js' %}"></script>
+<div class="row d-flex flex-row h-100">
+    <div class="col d-flex flex-column h-100">
+        <div class="row">
+            <div class="col-4 text-center d-flex flex-column justify-content-center">
+                <img alt="logo" src="/media/{{ org.logo }}" class="rounded of-contain org-photo"/>
+            </div>
+            <div class="col-8 text-left">
+                <div class="row">
+                    <div class="col">
+                        <h2>{{ org.display_name }}{% if org.local_name %}&nbsp;<i>({{ org.local_name }})</i>{% endif %}</h2>
+                        {% if org.full_name %}<h4>{{ org.full_name }}</h4>{% endif %}
+                        {% if org.parent %}<h5>Member of <a href="{% url 'org-detail' org.parent.id %}">{{ org.parent.display_name }}</a></h5> {% endif %}
+                        <input type="hidden" value="{{ org.id }}" id="id_org_id">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-left">
+                        <div class="row my-2">
+                            <div class="col-3">
+                                <strong>Active in</strong>
+                            </div>
+                            <div class="col-9">
+                                {% if org.level_type == 'N' %}{% for country in org.countries %}{{ country.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}{% if org.level_type == 'I' %}Internationally{% endif %}
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col-3">
+                                <strong>Organization type</strong>
+                            </div>
+                            <div class="col-9">
+                                {{ org.get_type_display }}
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col-3">
+                                <strong>Members on this website</strong>
+                            </div>
+                            <div class="col-9">
+                                {{ num_org_members }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="members-tab" data-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="false">Members</a>
+                  </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-content d-flex flex-grow-1 verticalscroll justify-content-center" id="myTabContent">
+          <div class="tab-pane fade show active w-75" id="members" role="tabpanel" aria-labelledby="members-tab">
+            <div class="row justify-content-center" id="id_members_container">
+                  <p>Members go here</p>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div class="modal fade in" id="addUserAsConnectionModal" tabindex="-1" role="dialog" aria-labelledby="addUserAsConnectionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addUserAsConnectionModalLabel">Request user connection?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row d-flex">
+              <div class="col d-flex">
+                  <p>Do you really want to send this user a connection request? If so, you can choose to add a note for the recipient:</p>
+              </div>
+          </div>
+          <form>
+              <div class="form-row d-flex">
+                  <div class="col d-flex">
+                      <textarea class="d-flex flex-fill verticalscroll" id="id_msg_textarea" rows="5" placeholder="Type your note here..."></textarea>
+                      <input type="hidden" id="id_profile_id"/>
+                  </div>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, take me back</button>
+        <button type="button" class="btn btn-primary" id="id_btn_performConnectionRequest" data-dismiss="modal">Send connection request</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="{% static 'js/org_post.js' %}"></script>
+{% endblock %}

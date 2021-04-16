@@ -1,0 +1,35 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+{% load crispy_forms_tags %}
+<div class="row">
+    <div class="col">
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Step 1 of 3: Choose report type</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Step 2 of 3: Create report</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Step 3 of 3: Upload images</a>
+            </li>
+        </ul>
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col justify-content-center text-center">
+            <input type="radio" name="type" id="id_radio_type_report" checked="checked" value="{% url 'report-create' %}">
+            <label for="id_radio_type_report">Real world incident or pollution</label><br>
+            <input type="radio" name="type" id="id_radio_type_onlinereport" value="{% url 'onlinereport-create' %}">
+            <label for="id_radio_type_onlinereport">Website, post, online sale...</label>
+    </div>
+</div>
+<div class="row">
+    <div class="col justify-content-center text-center">
+        <button class="btn btn-primary" id="id_btn_proceed">Submit & proceed to next step</button>
+    </div>
+</div>
+<script type="text/javascript" src="{% static 'js/newreportchoice_post.js' %}"></script>
+{% endblock %}

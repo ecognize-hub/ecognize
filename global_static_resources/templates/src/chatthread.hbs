@@ -1,0 +1,19 @@
+<div class="border" id="{{ domId }}" data-threadId="{{ thread.id }}">
+    <div class="row bg-light">
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    Re: {{ thread.subject }}
+                </div>
+                <div class="col-auto">
+                    {{ last_message_timestamp }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    {{ thread.initiator.user_name }}{{#if thread.initiator.real_name }} ({{ thread.initiator.real_name }}){{/if}}{{#if thread.recipient_users}}{{#each thread.recipient_users}}, {{ this.user_name }}{{#if this.real_name }} ({{ this.real_name }}){{/if}}{{/each}}{{/if}}{{#if thread.recipient_orgs }}; {{#each thread.recipient_orgs}}{{ this }}, {{/each}}{{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

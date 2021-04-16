@@ -1,0 +1,107 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+{% load countries %}
+{% get_countries as countries %}
+<script type="text/javascript" src="{% static 'js/mapbox-gl.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/mapbox-gl.css' %}"/>
+<script src="{% static 'js/mapbox-gl-geocoder.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/mapbox-gl-geocoder.css' %}" type="text/css"/>
+<script type="text/javascript" src="{% static 'js/choices.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/choices.min.css' %}"/>
+<script type="text/javascript" src="{% static 'js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/tempusdominus-bootstrap-4.min.css' %}"/>
+<script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/eventpreview.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/enums.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/map-functions.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/events_search_pre.js' %}"></script>
+<div class="d-flex flex-column h-100">
+    <div class="row">
+        <div class="col">
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                  <a id="id_tab_offline_events" class="nav-link active" href="#"><h4>Offline events</h4></a>
+              </li>
+              <li class="nav-item">
+                  <a id="id_tab_online_events" class="nav-link" href="#"><h4>Online events</h4></a>
+              </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="row mt-2">
+                <div class="col">
+                    <h5>Filter your search:</h5>
+                </div>
+                <div class="col text-right">
+                    <button id="id_btn_search" type="button" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <form action="#">
+                        <div class="row my-1">
+                            <div class="col-4"><label for="datepickerstart_inner">Start date:</label></div>
+                            <div class="col">
+                                <div class="input-group date" id="datepickerstart" data-target-input="nearest">
+                                    <input id="datepickerstart_inner" type="text" class="dateinput-w-100">
+                                    <div class="input-group-append" data-target="#datepickerstart" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <div class="col-4"><label for="id_datepickerend_inner">End date:</label></div>
+                            <div class="col">
+                                <div class="input-group date" id="datepickerend" data-target-input="nearest">
+                                    <input id="id_datepickerend_inner" type="text" class="dateinput-w-100">
+                                    <div class="input-group-append" data-target="#datepickerend" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-1 offline_elements">
+                            <div class="col-4"><label for="choices-types-offline">Category:</label></div>
+                            <div class="col">
+                                <select class="form-control" name="choices-types" id="choices-types-offline" multiple="multiple">
+                                    {% for category in offline_categories %}
+                                    <option value="{{ category.0 }}">{{ category.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row my-1 online_elements d-none">
+                            <div class="col-4"><label for="choices-types-online">Category:</label></div>
+                            <div class="col">
+                                <select class="form-control" name="choices-types" id="choices-types-online" multiple="multiple">
+                                    {% for category in online_categories %}
+                                    <option value="{{ category.value }}">{{ category.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 offline_elements">
+            <div id='map' style='width: 100%; height: 300px;'></div>
+            <input type="hidden" value="{{ usercountry }}" id="id_userCountry">
+            <input type="hidden" value="{% static 'img/markers/map-marker-blue.png' %}" id="id_marker_url">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <hr/>
+        </div>
+    </div>
+    <div class="row mh-0 verticalscroll flex-row justify-content-start offline_elements" id="offline_events_container"></div>
+    <div class="row mh-0 verticalscroll flex-row justify-content-start d-none online_elements" id="online_events_container"></div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/events_search_post.js' %}"></script>
+{% endblock %}

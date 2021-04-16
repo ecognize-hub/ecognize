@@ -1,0 +1,26 @@
+{% load static %}
+
+<style type="text/css">{% block map_css %}
+    #{{ id }}_map { width: 500px; height: 500px; }
+    #{{ id }}_map .aligned label { float: inherit; }
+    #{{ id }}_div_map { position: relative; vertical-align: top;}
+    {% if not display_raw %}#{{ id }} { display: none; }{% endif %}
+    {% endblock %}
+</style>
+
+<div id="{{ id }}_div_map" class="h-100 w-100">
+    <div id="{{ id }}_map"></div>
+    <textarea id="{{ id }}" class="vSerializedField required" cols="150" rows="10" name="{{ name }}">{{ serialized }}</textarea>
+    {% block map_options %}
+    <input type="hidden" id="id_options_id" value="{{ id }}">
+    <input type="hidden" id="id_options_name" value="{{ name }}">
+    <input type="hidden" id="id_options_geomType" value="{{ geom_type }}">
+    <input type="hidden" id="id_options_srid" value="{{ map_srid }}">
+    <script type="text/javascript" src="{% static 'js/mapbox_widget_map_options.js' %}"></script>{% endblock %}
+    {% block base_layer %}
+    <script type="text/javascript" src="{% static 'js/mapbox_widget_base_layer.js' %}"></script>
+    {% endblock %}
+    {% block options %}
+    <script type="text/javascript" src="{% static 'js/mapbox_widget_options.js' %}"></script>
+    {% endblock %}
+</div>

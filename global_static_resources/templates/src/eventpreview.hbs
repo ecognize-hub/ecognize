@@ -1,0 +1,11 @@
+<div class="col-{{ colWidth }} bg-light my-3 py-3" id="{{ domId }}">
+    <div class="row py-1">
+        <div class="col"><h4><a href="{{ eventLink }}">{{ title }}</a>{{#each badges}} <span class="badge badge-secondary">{{ this }}</span>{{/each}}</h4></div>
+    </div>
+    <div class="row py-1">
+        <div class="col"><i class="fas fa-map-marker-alt"></i> {{ address }}</div>
+        <div class="col">
+            <i class="fas fa-fw fa-clock"></i> {{ datetime_start }} - {{ datetime_end }}
+        </div>
+    </div>
+</div>

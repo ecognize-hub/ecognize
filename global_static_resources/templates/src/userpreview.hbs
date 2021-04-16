@@ -1,0 +1,28 @@
+<div class="col-{{ colWidth }} bg-light rounded mx-3 my-3 text-left" id="{{ domId }}">
+    <div class="row py-1">
+        <div class="col-auto">
+            <a href="{{ profileLink }}" title="View user profile"><img alt="avatar" class="border rounded-circle" src="{{ thumbnail }}" width="50" height="50"/></a>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <h5><a href="{{ profileLink }}">{{ user_name }}</a></h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h6><a href="{{ profileLink }}">{{ real_name }}</a></h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-auto">
+              {{#each actions}}
+                  <div class="row">
+                      <div class="col">
+                          <a href="{{ this.href }}" data-toggle="{{ this.toggle }}" data-target="{{ this.target }}" data-arg-id="{{ this.argId }}"><i class="{{ this.iconClasses }}"></i></a>
+                      </div>
+                  </div>
+              {{/each}}
+        </div>
+    </div>
+</div>

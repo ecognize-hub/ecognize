@@ -1,0 +1,190 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+<script type="text/javascript" src="{% static 'js/choices.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/myreports_pre.js' %}"></script>
+<div class="row mr-0">
+    <div class="column flex-grow-1 py-3">
+        <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+          <li class="nav-item">
+              <a class="nav-link active" id="reports-tab" data-toggle="tab" href="#reports" role="tab" aria-controls="reports" aria-selected="true"><h4>My reports</h4></a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" id="onlinereports-tab" data-toggle="tab" href="#onlinereports" role="tab" aria-controls="onlinereports" aria-selected="false"><h4>My online reports</h4></a>
+          </li>
+        </ul>
+        <div class="tab-content mt-4" id="myTabContent">
+            <div class="tab-pane fade show active" id="reports" role="tabpanel" aria-labelledby="reports-tab">
+                <table class="table table-bordered" id="id_table_reports">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th data-label="id">ID</th>
+                            <th data-label="id" data-translator="createButtons" data-escape="false">Actions</th>
+                            <th data-label="properties.timestamp" data-translator="prettyPrintDateTime">Date</th>
+                            <th data-label="properties.category" data-translator="mainCategory" data-escape="false">Category</th>
+                            <th data-label="properties.category" data-translator="subCategory" data-escape="false">Sub-category</th>
+                            <th data-label="properties.location_type" data-translator="locationType">Location</th>
+                            <th data-label="properties.country" data-translator="countryName">Country</th>
+                            <th data-label="geometry.coordinates">Coordinates</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_reportdetails">
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="onlinereports" role="tabpanel" aria-labelledby="onlinereports-tab">
+                <table class="table table-bordered" id="id_table_onlinereports">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th data-label="id">ID</th>
+                            <th data-label="id" data-translator="createOnlineButtons" data-escape="false">Actions</th>
+                            <th data-label="timestamp" data-translator="prettyPrintDateTime">Date</th>
+                            <th data-label="category" data-translator="onlineCategory">Category</th>
+                            <th data-label="url">URL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_onlinereportdetails">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<div class="modal fade in" id="reportDetailModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reportModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table id="id_modal_table">
+        <tbody>
+            <tr>
+                <td>Category</td>
+                <td id="detail_category" data-label="properties.category" data-translator="mainCategory"></td>
+            </tr>
+            <tr>
+                <td>Subcategory</td>
+                <td id="detail_subcategory" data-label="properties.category" data-translator="subCategory"></td>
+            </tr>
+            <tr>
+                <td>Location type</td>
+                <td id="detail_location" data-label="properties.location_type" data-translator="locationType"></td>
+            </tr>
+            <tr>
+                <td>Country</td>
+                <td id="detail_country" data-label="properties.country" data-translator="countryName"></td>
+            </tr>
+            <tr>
+                <td>Coordinates</td>
+                <td id="detail_geom" data-label="geometry.coordinates"></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td id="detail_description" data-label="properties.description"></td>
+            </tr>
+            <tr>
+                <td>Images</td>
+                <td id="detail_images"><div id="imgCarousel" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner" id="carousel-inner">
+          </div>
+          <a class="carousel-control-prev" href="#imgCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#imgCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div></td>
+            </tr>
+        </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- online report details modal -->
+<div class="modal fade in" id="onlineReportDetailModal" tabindex="-1" role="dialog" aria-labelledby="onlineReportDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title" id="onlineReportDetailModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table id="id_online_modal_table">
+        <tbody>
+            <tr>
+                <td>Category</td>
+                <td id="detail_online_category" data-label="category" data-translator="onlineCategory"></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td id="detail_online_description" data-label="description"></td>
+            </tr>
+            <tr>
+                <td>Address (URL)</td>
+                <td id="detail_online_address" data-label="url"></td>
+            </tr>
+            <tr>
+                <td>Images</td>
+                <td id="detail_online_images"><div id="imgOnlineCarousel" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner" id="onlineCarousel-inner">
+          </div>
+          <a class="carousel-control-prev" href="#imgCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#imgCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div></td>
+            </tr>
+        </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Delete Modal -->
+<div class="modal fade in" id="reportDeleteModal" tabindex="-1" role="dialog" aria-labelledby="reportDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reportDeleteModalLabel">Confirm deletion</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <p>Are you sure you want to delete your report with ID &#35;<span id="id_span_delete_id"></span>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, take me back</button>
+        <button type="button" class="btn btn-primary" id="id_button_deleteReport" data-dismiss="modal" data-reportid="">Yes, delete!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/myreports_post.js' %}"></script>
+
+{% endblock %}

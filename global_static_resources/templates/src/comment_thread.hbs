@@ -1,0 +1,35 @@
+<div class="row bg-light shadow-lg rounded my-5 py-3" id="{{ domId }}">
+    <div class="col">
+        <div class="row">
+            <div class="col" id="id_div_msgCtr_for_thread_{{ thread.id }}">
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-auto ml-4">
+                <div class="row">
+                    <div class="col-auto">
+                        <img alt="avatar" class="border rounded-circle" src="{{ me.thumbnail }}" width="50" height="50" />
+                    </div>
+                    <div class="col text-left">
+                        <div class="row">
+                            <div class="col">
+                                {{ me.user_name }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ me.real_name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col d-flex flex-column mx-4">
+                <textarea class="d-flex flex-fill verticalscroll" id="id_msg_textarea_{{ thread.id }}" rows="5" placeholder="Write your message here..."></textarea>
+            </div>
+            <div class="col-auto mr-4">
+                <button class="btn btn-primary" id="btn_send_{{ thread.id }}">Send</button>
+            </div>
+        </div>
+    </div>
+</div>

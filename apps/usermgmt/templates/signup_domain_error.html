@@ -1,0 +1,8 @@
+{% extends base_template_name %}
+{% load static %}
+{% block content %}
+<h2>Error: E-mail address mismatch</h2>
+<p>Please use your organization's e-mail address for signing up. It should end in @{{ org.domain }}.</p>
+<p><a id="id_a_goback" href="#">Go Back</a></p>
+<script src="{% static 'js/signup_domain_error_post.js' %}"></script>
+{% endblock %}

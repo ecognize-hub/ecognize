@@ -1,0 +1,26 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+<script type="text/javascript" src="{% static 'js/rankings_pre.js' %}"></script>
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Username</th>
+            <th>Country</th>
+            <th>Reports</th>
+            <th>Reputation</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for profile in userprofiles %}
+        <tr>
+            {% if profile.id != 0 %}<td><a href="{% url 'userprofile-detail' profile.id %}">{{ profile.user__username }}</a></td>{% endif %}
+            {% if profile.id == 0 %}<td>{{ profile.user__username }}</td>{% endif %}
+            <td class="countrycode">{{ profile.country }}</td>
+            <td>{{ profile.num_reports }}</td>
+            <td>{{ profile.reputation }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

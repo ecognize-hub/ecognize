@@ -1,0 +1,1 @@
+document.getElementById("id_a_goback").addEventListener("click", function(e){ history.back(); });

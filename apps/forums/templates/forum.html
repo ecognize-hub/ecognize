@@ -1,0 +1,239 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+{% load countries %}
+{% get_countries as countries %}
+<script type="text/javascript" src="{% static 'js/choices.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/choices.min.css' %}"/>
+<script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/threadpreview.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/forum_pre.js' %}"></script>
+<div class="row h-100">
+    <div class="col h-100 d-flex flex-column justify-content-start">
+        <div class="row pb-4">
+                <div class="col">
+                    <h6><a href="{% url 'forums-all' %}"><i class="fas fa-fw fa-arrow-left"></i>&nbsp;Back to forums overview</a></h6>
+                </div>
+        </div>
+        <input type="hidden" value="{{ forum_id }}" id="id_forum_id">
+        <div class="row mx-1" id="forum_container">
+            <div class="col">
+                <h4>{{ forum_name }}</h4>
+            </div>
+            {% if is_forum_creator %}
+            <div class="col-auto">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#deleteForumModal">Delete this forum&nbsp;<i class="fas fa-trash-alt"></i></button>
+            </div>
+            {% endif %}
+            {% if is_forum_creator or is_admin %}
+            <div class="col-auto">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#editForumAccessModal">Edit access&nbsp;<i class="fas fa-user-edit"></i></button>
+            </div>
+            {% endif %}
+            <div class="col-auto">
+                <a href="{% url 'forum-threads-search' forum_id %}"><button class="btn btn-primary">Search&nbsp;<i class="fas fa-fw fa-search"></i></button></a>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#startNewThreadModal">Start new thread&nbsp;<i class="fas fa-fw fa-comment-medical"></i></button>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#showPartiesWithAccessModal">Show access&nbsp;<i class="fas fa-fw fa-info-circle"></i></button>
+            </div>
+        </div>
+        <div class="row py-1 mt-3 px-3 mx-3 bg-dark text-white">
+            <div class="col">
+                <strong><i>Threads, creators and creation date</i></strong>
+            </div>
+            <div class="col-2">
+                <strong><i>Replies</i></strong>
+            </div>
+            <div class="col-4">
+                <strong><i>Last reply</i></strong>
+            </div>
+        </div>
+        <div class="row d-flex flex-fill verticalscroll">
+            <div class="col" id="id_threads_container"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div class="modal fade in" id="startNewThreadModal" tabindex="-1" role="dialog" aria-labelledby="startNewThreadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="startNewThreadModalLabel">Start new thread</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form>
+              <div class="form-row">
+                  <div class="col-auto mr-3">
+                      <strong><label for="id_subject_input">Subject</label></strong>
+                  </div>
+                  <div class="col">
+                      <input type="text" placeholder="Subject" id="id_subject_input">
+                  </div>
+              </div>
+              <div class="form-row d-flex mt-1">
+                  <div class="col flex-fill d-flex">
+                      <strong><label for="id_post_textarea">Message:</label></strong>
+                  </div>
+              </div>
+              <div class="form-row d-flex my-2">
+                  <div class="col flex-fill d-flex">
+                      <textarea class="d-flex flex-fill verticalscroll" id="id_post_textarea" rows="5" placeholder="Type your message here..."></textarea>
+                  </div>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Discard thread</button>
+        <button type="button" id="id_btn_startThread" class="btn btn-primary" data-dismiss="modal">Start thread</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="deleteForumModal" tabindex="-1" role="dialog" aria-labelledby="deleteForumModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteForumModalLabel">Delete this forum?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <p>Really delete this forum? All threads and posts will be deleted. This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" id="id_btn_deleteForum" class="btn btn-primary" data-dismiss="modal">Yes, delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="showPartiesWithAccessModal" tabindex="-1" role="dialog" aria-labelledby="showPartiesWithAccessModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="showPartiesWithAccessModalLabel">Parties with access to this forum</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+              <div class="col d-none" id="id_access_label_users">
+                  <h5>Users</h5>
+              </div>
+              <div class="col d-none" id="id_access_label_orgs">
+                  <h5>Organizations</h5>
+              </div>
+              <div class="col d-none" id="id_access_label_occugrps">
+                  <h5>Occupational groups</h5>
+              </div>
+          </div>
+          <div class="row text-left">
+              <div class="col d-none" id="id_col_users_with_access">
+              </div>
+              <div class="col d-none" id="id_col_orgs_with_access">
+              </div>
+              <div class="col d-none"  id="id_col_occgroups_with_access">
+              </div>
+          </div>
+          <div class="row mt-4">
+              <div class="col d-none" id="id_label_administrators">
+                  <h5>Administrators</h5>
+              </div>
+              <div class="col d-none" id="id_label_moderators">
+                  <h5>Moderators</h5>
+              </div>
+          </div>
+          <div class="row text-left">
+              <div class="col d-none" id="id_col_administrators">
+              </div>
+              <div class="col d-none" id="id_col_moderators">
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Go back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="editForumAccessModal" tabindex="-1" role="dialog" aria-labelledby="editForumAccessModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editForumAccessModalLabel">Edit forum</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form id="id_createNewForum" name="createNewForum" method="post" action="{% url 'api-forums-create-custom' %}">
+              {% csrf_token %}
+              <input type="hidden" id="id_own_profile_id" value="{{ current_user_profile_id }}">
+              <div class="form-row pt-2">
+                  <div class="col-auto mr-2">
+                      <strong><label for="name">Name</label></strong>
+                  </div>
+                  <div class="col ml-2">
+                      <input name="name" id="name" value="{{ forum_name }}" class="w-100">
+                  </div>
+              </div>
+              <div class="form-row mt-4">
+                  <div class="col px-2">
+                      <strong><label for="choices-connections">Contacts to be granted access</label></strong>
+                  </div>
+                  <div class="col px-2">
+                      <strong><label for="choices-orgs">Organizations to be granted access</label></strong>
+                  </div>
+              </div>
+              <div class="form-row pb-2">
+                  <div class="col px-2">
+                      <select class="form-control" name="participant_users_profiles" id="choices-connections" multiple="multiple">
+                      </select>
+                  </div>
+                  <div class="col px-2">
+                      <select class="form-control" name="participant_organizations" id="choices-orgs" multiple="multiple">
+                      </select>
+                  </div>
+              </div>
+              <div class="form-row pt-2">
+                  <div class="col px-2">
+                      <strong><label for="choices-admins">Administrators</label></strong>
+                  </div>
+                  <div class="col px-2">
+                      <strong><label for="choices-mods">Moderators</label></strong>
+                  </div>
+              </div>
+              <div class="form-row pb-2">
+                  <div class="col px-2">
+                      <select class="form-control" name="administrators" id="choices-admins" multiple="multiple">
+                      </select>
+                  </div>
+                  <div class="col px-2">
+                      <select class="form-control" name="moderators" id="choices-mods" multiple="multiple">
+                      </select>
+                  </div>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Discard</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="id_btn_updateForum">Update forum</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/forum_post.js' %}"></script>
+{% endblock %}

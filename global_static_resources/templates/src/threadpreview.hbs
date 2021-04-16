@@ -1,0 +1,39 @@
+<div class="row py-3 px-3 mx-3 bg-light border rounded" id="{{ domId }}">
+    <div class="col-auto">
+        <a href="{{ authorProfileLink }}"><img alt="avatar" class="border rounded-circle" src="{{ author.thumbnail }}" width="50" height="50" /></a>
+    </div>
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                <h5 data-label="subject"><a href="{{ threadLink }}">{{ thread.subject }}</a></h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="{{ authorProfileLink }}">{{ author.user_name }}</a>, {{ started_timestamp }}
+            </div>
+        </div>
+    </div>
+    <div class="col-2" data-label="number_of_responses">
+        {{ thread.number_of_responses }}
+    </div>
+    <div class="col-4">
+        <div class="row">
+            <div class="col-auto">
+                <a href="{{ lastPostUserProfileLink }}"><img alt="avatar" class="border rounded-circle" src="{{ last_post_user.thumbnail }}" width="50" height="50" /></a>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <a href="{{ lastPostUserProfileLink }}">{{ last_post_user.user_name }}</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ last_post_datetime }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

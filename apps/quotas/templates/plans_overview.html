@@ -1,0 +1,183 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+<div class="row">
+    <div class="col">
+        <h3>Plans and Pricing</h3>
+        <p>Most of our platform is provided free of charge. We want to help the environmental community as much as possible, at little to no charge. However, some of our features are limited to paid accounts, as they are expensive for us to operate.<br/>
+        Even if you do not require any of the paid features, please consider supporting our platform to help cover some of its operation and development costs.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h4>Your organization's current plan</h4>
+        <p>Your organization is currently subscribed to the <strong>{{ plan_name }}</strong> plan. The current subscription is valid until <strong>{{ plan_validity_date }}</strong>.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h4>Our subscription plans</h4>
+        <p>All limitations and features apply per organization, not per user.</p>
+    </div>
+</div>
+<div class="row mx-5">
+    <div class="col">
+        <div class="row">
+            <div class="col"> <!-- empty on purpose -->
+                &nbsp;
+            </div>
+            <div class="col border text-center pt-3">
+                <input id="id_input_plan_F" checked="checked" type="radio" name="plan" value="F"><br/>
+                <h5><label for="id_input_plan_F">Free</label></h5>
+            </div>
+            <div class="col border text-center pt-3">
+                <input id="id_input_plan_S" type="radio" name="plan" value="S">
+                <h5><label for="id_input_plan_S">Supporter</label></h5>
+            </div>
+            <div class="col border text-center pt-3">
+                <input id="id_input_plan_P" type="radio" name="plan" value="P">
+                <h5><label for="id_input_plan_P">Pro</label></h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col border">
+                Report access
+            </div>
+            <div class="col border text-center">
+                &#10004;<sup>1</sup>
+            </div>
+            <div class="col border text-center">
+                &#10004;<sup>1</sup>
+            </div>
+            <div class="col border text-center">
+                &#10004;
+            </div>
+        </div>
+        <div class="row">
+            <div class="col border">
+                Social functions: Chat, user groups &amp; user search
+            </div>
+            <div class="col border text-center">
+                &#10004;
+            </div>
+            <div class="col border text-center">
+                &#10004;
+            </div>
+            <div class="col border text-center">
+                &#10004;
+            </div>
+        </div>
+        <div class="row">
+            <div class="col border">
+                Event management
+            </div>
+            <div class="col border text-center">
+                &#10004;
+            </div>
+            <div class="col border text-center">
+                &#10004;
+            </div>
+            <div class="col border text-center">
+                &#10004;
+            </div>
+        </div>
+        <div class="row">
+            <div class="col border">
+                Forums for the public, professional communities, and private forums for your organization
+            </div>
+            <div class="col border text-center">
+                &#10004;
+            </div>
+            <div class="col border text-center">
+                &#10004;
+            </div>
+            <div class="col border text-center">
+                &#10004;
+            </div>
+        </div>
+        <div class="row">
+            <div class="col border">
+                Custom user-created forums
+            </div>
+            <div class="col border text-center">
+                {{ limitations.forums.F }}
+            </div>
+            <div class="col border text-center">
+                {{ limitations.forums.S }}
+            </div>
+            <div class="col border text-center">
+                Unlimited
+            </div>
+        </div>
+        <div class="row">
+            <div class="col border">
+                File exchange space
+            </div>
+            <div class="col border text-center">
+                {{ limitations_filesharing_F }} MiB
+            </div>
+            <div class="col border text-center">
+                {{ limitations_filesharing_S }} MiB
+            </div>
+            <div class="col border text-center">
+                Unlimited
+            </div>
+        </div>
+        <div class="row">
+            <div class="col border">
+                Branding of reporting app
+            </div>
+            <div class="col border text-center">
+                &#10007;
+            </div>
+            <div class="col border text-center">
+                &#10007;
+            </div>
+            <div class="col border text-center">
+                &#10004;
+            </div>
+        </div>
+        <div class="row">
+            <div class="col border">
+                Financial support for our platform <i class="fas fa-heart"></i>
+            </div>
+            <div class="col border text-center">
+                &#10007;
+            </div>
+            <div class="col border text-center">
+                <i class="fas fa-heart"></i>
+            </div>
+            <div class="col border text-center">
+                <i class="fas fa-heart"></i>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col border">
+                Pricing
+            </div>
+            <div class="col border text-center">
+                0 &#8364; / month<br/>
+                <small>0 &#8364; / year</small>
+            </div>
+            <div class="col border text-center">
+                5 &#8364; / month<br/>
+                <small>or 50 &#8364; / year</small>
+            </div>
+            <div class="col border text-center">
+                10 &#8364; / month<br/>
+                <small>or 100 &#8364; / year</small>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col text-center">
+                <small>Notes: <sup>1</sup> Report access is free for all non-profits, inter-governmental organizations, governmental offices and ministries, law enforcement agencies, journalists and reporters, and academic institutions. However, commercial entities (i.e. private companies and organizations which are neither non-profits nor public institutions) require a Pro subscription.</small>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col text-center">
+                <button class="btn btn-primary">Proceed</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

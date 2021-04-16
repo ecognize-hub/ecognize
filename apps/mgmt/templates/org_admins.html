@@ -1,0 +1,39 @@
+{% extends base_template_name %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load countries %}
+{% block content %}
+{% get_countries as countries %}
+<script type="text/javascript" src="{% static 'js/choices.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/choices.min.css' %}"/>
+<div class="row">
+    <div class="col">
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Organization name</th>
+                <th>Admins</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for org in org_groups  %}
+            <tr>
+                <td>
+                    {{ org.display_name }}
+                </td>
+                <td>
+                    {% for admin in org.admins.all %}
+                    {{ admin }},
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="#" data-target="#editAdminsModal" data-toggle="modal" data-org-id="{{ org.id }}" data-org-name="{{ org.display_name }}"><i class="fas fa-edit"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+{% endblock %}

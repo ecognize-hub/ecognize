@@ -1,0 +1,255 @@
+{% extends base_template_name %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load countries %}
+{% block content %}
+{% get_countries as countries %}
+<script type="text/javascript" src="{% static 'js/choices.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/choices.min.css' %}"/>
+<script src="{% static 'js/org_add_requests_admin_pre.js' %}" type="text/javascript"></script>
+<div class="row">
+    <div class="col">
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Organization name</th>
+                <th>Organization website</th>
+                <th>Parent organization</th>
+                <th>Applicant name</th>
+                <th>Applicant e-mail</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for req in add_requests  %}
+            <tr>
+                <td>
+                    {{ req.org_name }}
+                </td>
+                <td>
+                    <a href="{{ req.org_website }}">{{ req.org_website }}</a>
+                </td>
+                <td>
+                    {{ req.parent_org_name }}
+                </td>
+                <td>
+                    {{ req.supplicant_name }}
+                </td>
+                <td>
+                    {{ req.supplicant_email_address }}
+                </td>
+                <td>
+                    <a href="#" data-target="#addOrgModal" data-toggle="modal" data-request-id="{{ req.id }}" data-org-name="{{ req.org_name }}" data-domain="{{ req.org_website }}"><i class="fas fa-check"></i></a>&nbsp;<a href="#" data-target="#deleteOrgRequestModal" data-toggle="modal" data-request-id="{{ reg.id }}"><i class="fas fa-times"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if add_requests|length == 0 %}
+        <div class="row text-center">
+            <div class="col">
+                <h3>No open requests.</h3>
+            </div>
+        </div>
+    {%  endif %}
+    </div>
+</div>
+<div class="row my-5 text-center">
+    <div class="col">
+        <button class="btn btn-primary" id="btn_createNewOrgFromScratch" data-toggle="modal" data-target="#addOrgModal">Add organization (without request) <i class="fas fa-plus"></i></button>
+    </div>
+</div>
+
+<div class="modal fade in" id="addOrgModal" tabindex="-1" role="dialog" aria-labelledby="addOrgModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addOrgModalLabel">Approve organization join request</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form id="id_form_new_org">
+            <input type="hidden" id="id_req_id_add">
+              <div class="form-row py-2">
+                  <div class="col">
+                      <div class="row">
+                          <div class="col">
+                              <strong><label for="id_input_display_name">Display name</label></strong>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col">
+                              <input type="text" id="id_input_display_name" name="display_name" placeholder="Display name" class="w-100">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col">
+                      <div class="row">
+                          <div class="col">
+                              <strong><label for="id_input_local_name">Local name</label></strong>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col">
+                              <input type="text" id="id_input_local_name" name="local_name" placeholder="Local name" class="w-100">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-row">
+                  <div class="col">
+                      <div class="row">
+                          <div class="col">
+                              <strong><label for="id_input_full_name">Full name</label></strong>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col">
+                              <input type="text" id="id_input_full_name" name="full_name" placeholder="Full name" class="w-100">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col">
+                      <div class="row">
+                          <div class="col">
+                              <strong><label for="id_input_type">Organization type</label></strong>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col">
+                              <select id="id_input_type" class="form-control" name="type">
+                                  {% for type in org_types %}
+                                  <option value="{{ type.value }}">{{ type.label }}</option>
+                                  {% endfor %}
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-row">
+                  <div class="col">
+                      <div class="row">
+                          <div class="col">
+                              <strong><label for="id_input_parent">Parent organization</label></strong>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col">
+                              <select name="parent" id="id_input_parent">
+                                  <option selected value> -- select an option -- </option>
+                                  {% for org in all_orgs %}
+                                  <option value="{{ org.id }}">{{ org.display_name }}</option>
+                                  {% endfor %}
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col">
+                      <div class="row">
+                          <div class="col">
+                              <strong><label for="id_input_is_parent">Is parent organization?</label></strong>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col">
+                              <input type="checkbox" id="id_input_is_parent" name="is_parent">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-row">
+                  <div class="col">
+                      <div class="row">
+                          <div class="col">
+                              <strong>Level:</strong>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col">
+                              <input type="radio" id="id_input_level_type_N" name="level_type" value="N">
+                              <label for="id_input_level_type_N">National</label>
+                              <input type="radio" id="id_input_level_type_I" name="level_type" value="I">
+                              <label for="id_input_level_type_S">International</label>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col">
+                      <div class="row">
+                          <div class="col">
+                              <strong><label for="id_input_countries">Countries</label></strong>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col">
+                              <select id="id_input_countries" class="form-control" name="countries" multiple="multiple">
+                                  {% for country in countries %}
+                                  <option value="{{ country.code }}">{{ country.name }}</option>
+                                  {% endfor %}
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-row">
+                  <div class="col">
+                      <div class="row">
+                          <div class="col">
+                              <strong><label for="id_logoDialog_id">Logo</label></strong>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col">
+                              <input type="file" id="id_logoDialog_id">
+                              <input type="hidden" id="id_input_logo_id" name="logo">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col">
+                      <div class="row">
+                          <div class="col">
+                              <strong><label for="id_input_domain">Domain</label></strong>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col">
+                              <input type="text" id="id_input_domain" name="domain" placeholder="Domain">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abort</button>
+        <button type="button" id="id_btn_createOrgGroup" class="btn btn-primary" data-dismiss="modal">Create organization</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="deleteOrgRequestModal" tabindex="-1" role="dialog" aria-labelledby="deleteOrgRequestModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteOrgRequestModalLabel">Delete organization join request</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          Are you sure you want to delete this organization's request to join the platform? This action cannot be undone.
+          <input type="hidden" id="id_req_id_del">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abort</button>
+        <button type="button" id="id_btn_deleteOrgRequest" class="btn btn-primary" data-dismiss="modal">Yes, delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/org_add_requests_admin_post.js' %}" type="text/javascript"></script>
+{% endblock %}

@@ -1,0 +1,23 @@
+<div class="col-8 col-xl-5 bg-light shadow-sm px-2 mx-4 my-2 py-2" id="{{ domId }}">
+    <div class="row py-1">
+        <div class="col-auto">
+            <a href="{{ groupPageUrl }}"><img alt="logo" class="rounded of-contain" src="{{ group.logo_thumbnail }}" width="120" height="60" /></a>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <h5><a href="{{ groupPageUrl }}">{{ group.display_name }}</a></h5>
+                </div>
+                <div class="col-auto">
+                    {{#each actions}}
+                        <div class="row">
+                            <div class="col">
+                                <a href="{{ this.href }}" data-toggle="{{ this.toggle }}" data-target="{{ this.target }}" data-arg-id="{{ this.argId }}"><i class="{{ this.iconClasses }}"></i></a>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

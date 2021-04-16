@@ -1,0 +1,224 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+{% load countries %}
+{% get_countries as countries %}
+<script type="text/javascript" src="{% static 'js/choices.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/choices.min.css' %}"/>
+<script type="text/javascript" src="{% static 'js/connections_pre.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/userpreview.js' %}"></script>
+
+<div class="row mt-4">
+    <div class="col">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="contacts-tab" data-toggle="tab" href="#yourcontacts" role="tab" aria-controls="about" aria-selected="true"><h4>Your contacts</h4></a>
+          </li>
+          <li class="nav-item" role="presentation">
+              <a class="nav-link" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="stats" aria-selected="false"><h4>Search new contacts</h4></a>
+          </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="tab-content d-flex flex-grow-1 verticalscroll justify-content-center" id="myTabContent">
+          <div class="tab-pane fade show active w-75" id="yourcontacts" role="tabpanel" aria-labelledby="contacts-tab">
+            <div class="row justify-content-center text-center d-none" id="id_requests_outer_container">
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <h3>Requests</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <h4>Received requests</h4>
+                                </div>
+                            </div>
+                            <div class="row" id="id_received_requests_container">
+                                <div class="col text-center">
+                                    <i>Currently, you have no requests to connect from other members.</i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <h4>Sent requests</h4>
+                                </div>
+                            </div>
+                            <div class="row" id="id_sent_requests_container">
+                                <div class="col text-center">
+                                    <i>Currently, you have no requests sent to other members.</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row d-none" id="id_requests_separator">
+                <div class="col">
+                    <hr>
+                </div>
+            </div>
+
+            <div class="d-flex row justify-content-center text-center">
+                <div class="col">
+                    <div class="d-flex row justify-content-center" id="id_connections_container">
+                    </div>
+                </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade w-75" id="search" role="tabpanel" aria-labelledby="search-tab">
+            <div class="d-flex row mt-3">
+                <div class="col justify-content-center text-center">
+                    <input class="text-center" id="id_search_box" type="text"/>&nbsp;
+                    <button class="btn btn-primary" id="id_btn_doProfileSearch">Search</button>
+                    <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseOptions" aria-expanded="false" aria-controls="collapseOptions">More options</button>
+                </div>
+            </div>
+            <div class="collapse" id="collapseOptions">
+                <form name="search-options" id="id-form-search-options">
+                    <div class="d-flex form-row justify-content-center text-center">
+                            <div class="col-3">
+                                Countries:
+                                <select class="form-control" name="countries" id="choices-countries" multiple="multiple">
+                                    {% for country in countries %}
+                                    <option value="{{ country.code }}">{{ country.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                Affiliation:
+                                <select class="form-control" name="types" id="choices-types" multiple="multiple">
+                                    {% for type in types %}
+                                    <option value="{{ type.0 }}">{{ type.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                    </div>
+                </form>
+                </div>
+            <div class="d-flex mt-3 row justify-content-center" id="id_searchresults_container"></div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div class="modal fade in" id="addUserAsConnectionModal" tabindex="-1" role="dialog" aria-labelledby="addUserAsConnectionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addUserAsConnectionModalLabel">Request user connection?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row d-flex">
+              <div class="col d-flex">
+                  <p>Do you really want to send this user a connection request? If so, you can choose to add a note for the recipient:</p>
+              </div>
+          </div>
+          <form>
+              <div class="form-row d-flex">
+                  <div class="col d-flex">
+                      <textarea class="d-flex flex-fill verticalscroll" id="id_msg_textarea" rows="5" placeholder="Type your note here..."></textarea>
+                      <input type="hidden" id="id_profile_id"/>
+                  </div>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, take me back</button>
+        <button type="button" class="btn btn-primary" id="id_btn_performConnectionRequest" data-dismiss="modal">Send connection request</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="deleteConnectionRequestModal" tabindex="-1" role="dialog" aria-labelledby="deleteConnectionRequestModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConnectionRequestModalLabel">Delete request to connect?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row d-flex">
+              <div class="col d-flex">
+                  <p>Do you really want to delete this request to connect?</p>
+                  <input type="hidden" id="id_request_id"/>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, take me back</button>
+        <button type="button" class="btn btn-primary" id="id_btn_performDeleteConnectionRequest" data-dismiss="modal">Yes, delete connection request</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="deleteConnectionModal" tabindex="-1" role="dialog" aria-labelledby="deleteConnectionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConnectionModalLabel">Remove from connections?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row d-flex">
+              <div class="col d-flex">
+                  <p>Do you really want to remove this user from your contacts?</p>
+                  <input type="hidden" id="id_connection_id"/>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, take me back</button>
+        <button type="button" class="btn btn-primary" id="id_btn_performDeleteConnection" data-dismiss="modal">Yes, remove from connections</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade in" id="acceptConnectionModal" tabindex="-1" role="dialog" aria-labelledby="acceptConnectionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="acceptConnectionModalLabel">Connect?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row d-flex">
+              <div class="col d-flex">
+                  <p>Do you want to accept this request to connect?</p>
+                  <input type="hidden" id="id_accept_id"/>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, take me back</button>
+        <button type="button" class="btn btn-primary" id="id_btn_performAcceptConnectionRequest" data-dismiss="modal">Yes, accept request to connect!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/connections_post.js' %}"></script>
+{% endblock %}

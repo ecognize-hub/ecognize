@@ -1,0 +1,17 @@
+<div class="row" id="{{ domId }}" data-level="{{ level }}" data-id="{{ folder.id }}">
+    <div class="col">
+        <div class="row">
+            <div class="col-auto">{{{ justification }}}</div>
+            <div class="col">
+                <i class="far fa-fw fa-plus-square" data-id="{{ folder.id }}" id="id_button_expand_{{ folder.id }}"></i>&nbsp;<i class="far fa-fw fa-folder"></i>&nbsp;<span data-id="{{ folder.id }}" id="id_nameSpan_folder_{{ folder.id }}">{{ folder.name }}</span>
+            </div>
+            <div class="col-4">{{ time_last_edited }}</div>
+        </div>
+        <div class="row">
+            <div class="col" id="id_div_subfolders_{{ folder.id }}"></div>
+        </div>
+        <div class="row">
+            <div class="col" id="id_div_files_{{ folder.id }}"></div>
+        </div>
+    </div>
+</div>

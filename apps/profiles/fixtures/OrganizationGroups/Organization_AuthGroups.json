@@ -1,0 +1,14 @@
+[
+{"model": "auth.group", "pk": 2251, "fields": {"name": "Interpol"}},
+{"model": "auth.group", "pk": 2252, "fields": {"name": "WWF International"}},
+{"model": "auth.group", "pk": 2253, "fields": {"name": "WWF Germany"}},
+{"model": "auth.group", "pk": 2254, "fields": {"name": "Europol"}},
+{"model": "auth.group", "pk": 2255, "fields": {"name": "WWF Canada"}},
+{"model": "auth.group", "pk": 2256, "fields": {"name": "Greenpeace International"}},
+{"model": "auth.group", "pk": 2257, "fields": {"name": "Greenpeace UK"}},
+{"model": "auth.group", "pk": 2258, "fields": {"name": "Greenpeace Germany"}},
+{"model": "auth.group", "pk": 2259, "fields": {"name": "Earth League International"}},
+{"model": "auth.group", "pk": 2260, "fields": {"name": "Friends of the Earth International"}},
+{"model": "auth.group", "pk": 2261, "fields": {"name": "BUND (Friends of the Earth Germany)"}},
+{"model": "auth.group", "pk": 2262, "fields": {"name": "CITES"}}
+]

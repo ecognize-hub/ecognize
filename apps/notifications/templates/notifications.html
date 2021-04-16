@@ -1,0 +1,19 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+<script type="text/javascript" src="{% static 'js/notifications_pre.js' %}"></script>
+{% for notification in notifications %}
+<div class="row bg-light rounded mx-3 px-3 my-3 py-3">
+    <div class="col-auto">
+        {% if profile in notification.viewed_by.all %}<i data-id="{{ notification.id }}" data-read-state="true" title="Mark unread" id="id_toggle_read_{{ notification.id }}" class="fas fa-eye-slash mark-read-unread-button text-primary"></i>{% else %}<i data-id="{{ notification.id }}" data-read-state="false" title="Mark read" id="id_toggle_read_{{ notification.id }}" class="fas fa-check mark-read-unread-button text-primary"></i>{% endif %}
+    </div>
+    <div class="col">
+        <a id="link_{{ notification.id }}" href="{% url 'goto-notification-target' notification.id%}" {% if profile in notification.viewed_by.all %}class="text-secondary"{% endif %}>{{ notification }}</a>
+    </div>
+    <div id="timestamp_{{ notification.id }}" class="col-4 {% if profile in notification.viewed_by.all %}text-secondary{% endif %}">
+        {{ notification.timestamp }}
+    </div>
+</div>
+{% endfor %}
+<script type="text/javascript" src="{% static 'js/notifications_post.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+<div class="row">
+    <div class="col">
+        <h4>Settings</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h5>Privacy settings</h5>
+    </div>
+</div>
+<form method="post" id="id-settingsChangeForm">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col">
+        {{ form.non_field_errors }}
+      <table>
+        {% for field in form %}
+        <tr>
+            <th class="px-4 py-1 my-1">
+              {{ field.label_tag }}
+            </th>
+            <td class="px-4 py-1 my-1">
+              {{ field }}
+              {{ field.errors }}
+            </td>
+            <td>
+              {% if field.help_text %}
+                <span data-toggle="tooltip" data-placement="top" data-html="true" title="{{ field.help_text }}">
+                  <i class="fas fa-fw fa-question-circle"></i>
+                </span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+  <div class="row my-2 py-2">
+    <div class="col">
+      <button class="btn btn-primary" type="submit">Save</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

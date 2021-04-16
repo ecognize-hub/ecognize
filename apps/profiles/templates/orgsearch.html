@@ -1,0 +1,46 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+{% load countries %}
+{% get_countries as countries %}
+<script type="text/javascript" src="{% static 'js/choices.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/choices.min.css' %}"/>
+<script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/orgpreview.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/orgsearch_pre.js' %}"></script>
+<div class="col d-flex flex-column h-100">
+    <div class="d-flex row">
+        <div class="col justify-content-center text-center">
+            <input class="text-center" id="id_search_box" type="text"/>&nbsp;
+            <button class="btn btn-primary" id="id_btn_doOrgSearch">Search</button>
+            <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseOptions" aria-expanded="false" aria-controls="collapseOptions">More options</button>
+        </div>
+    </div>
+    <div class="collapse" id="collapseOptions">
+        <form name="search-options" id="id-form-search-options">
+            <div class="d-flex form-row justify-content-center text-center">
+                    <div class="col-3">
+                        <label for="choices-countries">Countries:</label>
+                        <select class="form-control" name="countries" id="choices-countries" multiple="multiple">
+                            {% for country in countries %}
+                            <option value="{{ country.code }}">{{ country.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label for="choices-types">Field:</label>
+                        <select class="form-control" name="types" id="choices-types" multiple="multiple">
+                            {% for type in types %}
+                            <option value="{{ type.0 }}">{{ type.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+            </div>
+        </form>
+    </div>
+    <div class="d-flex row justify-content-center" id="id_searchresults_container">
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/orgsearch_post.js'  %}"></script>
+{% endblock %}

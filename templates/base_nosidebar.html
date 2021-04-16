@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <title>Ecognize - Ecological collaboration and reporting platform</title>
+        <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-5.14.0/css/all.min.css' %}">
+        <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"> -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-theme.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/pagination.css' %}">
+        <script type="text/javascript" src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/util.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/pagination.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/moment.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/enums.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/constants.js' %}"></script>
+        <script src="{% static 'django_js_reverse/js/reverse.js' %}"></script>
+    </head>
+    <body>
+        <div class="container-fluid h-100 d-flex flex-column mx-0 px-0">
+            <div class="row mx-0 px-0 no-gutters">
+                <div class="col mx-0 px-0">
+                    <!-- top navbar -->
+                    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+                        <a class="navbar-brand" href="/"><img src="{% static 'img/logo.png' %}" height="30" class="d-inline-block align-top" alt="Ecognize" loading="lazy"> - Report. Connect. Act.</a>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/"><i class="fas fa-fw fa-home"></i>&nbsp;Home</a>
+                                </li>
+                                {% if user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'messages-overview' %}"><i class="fas fa-fw fa-envelope"></i>&nbsp;Messages</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'my-notifications-list' %}"><i class="fas fa-fw fa-bell"></i>&nbsp;Notifications</a>
+                                </li>
+                                <li class="dropdown nav-item">
+                                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle"></i>&nbsp;My account</a>
+                                    <ul class="dropdown-menu bg-dark">
+                                      <li class="nav-item">
+                                          <a class="nav-link" href="{% url 'my-userprofile-detail' %}"><i class="fas fa-fw fa-address-card"></i>&nbsp;My profile</a>
+                                      </li>
+                                      <li class="nav-item">
+                                          <a class="nav-link" href="{% url 'profile-settings' %}"><i class="fas fa-fw fa-cog"></i>&nbsp;Settings</a>
+                                      </li>
+                                      <li class="nav-item">
+                                          <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-fw fa-sign-out-alt"></i>&nbsp;Log Out</a>
+                                      </li>
+                                    </ul>
+                                </li>
+                                {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'report-create-choice' %}"><i class="fas fa-fw fa-file-upload"></i>&nbsp;Submit report</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-fw fa-sign-in-alt"></i>&nbsp;Log In</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'signup' %}"><i class="fas fa-fw fa-user-plus"></i>&nbsp;Sign up</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </nav>
+                    <!-- end top navbar -->
+                </div>
+            </div>
+            <div class="row flex-fill flex-column flex-sm-row d-flex mr-0 h-100-wo-topnav">
+                <div class="col h-100 verticalscroll rounded">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade in" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+              <div class="modal-header bg-danger bg-s">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <p>The following errors occurred<span id="id_span_status_code_container" class="d-none"> (status code <span id="id_span_status_code"></span>)</span>:</p>
+                  <p id="id_p_error_message"></p>
+                  <ul id="id_ul_errors">
+                  </ul>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade in" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+              <div class="modal-header bg-danger bg-s">
+                <h5 class="modal-title" id="successModalLabel">Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <p id="id_p_success_message"></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </body>
+</html>

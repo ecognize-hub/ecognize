@@ -1,0 +1,123 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+<script type="text/javascript" src="{% static 'js/choices.min.js' %}" xmlns="http://www.w3.org/1999/html"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/choices.min.css' %}"/>
+<script type="text/javascript" src="{% static 'js/handlebars.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/chatthread.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/chatmsg_mine.js' %}"></script>
+<script type="text/javascript" src="{% static 'templates/compiled/chatmsg_theirs.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/messages_pre.js' %}"></script>
+<div class="d-flex flex-column h-100">
+    <div class="row d-flex flex-row flex-grow-1 h-100">
+        <div class="col-3 d-flex flex-column flex-grow-1">
+            <div class="row">
+                <div class="col py-4 text-center">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#startNewConvoModal">New conversation &nbsp;<i class="fas fa-fw fa-comment-medical"></i></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col d-flex flex-column flex-grow-1 verticalscroll" id="id_div_messageheads">
+                </div>
+            </div>
+        </div>
+        <div class="col-6 border border-bottom-0 border-top-0 d-flex justify-content-between flex-column flex-grow-1 h-100">
+            <div class="row d-flex flex-fill verticalscrollparent flex-column">
+                <div class="col border flex-fill border-top-0 border-bottom-0 verticalscroll" id="id_div_messagebody">
+                </div>
+            </div>
+            <div class="row d-flex">
+                <div class="col border border-bottom-0 border-top-0 d-none" id="id_div_chatinput">
+                    <div class="row">
+                        <div class="col d-flex flex-column px-1">
+                            <textarea class="d-flex flex-fill verticalscroll" id="id_msg_textarea" rows="5" placeholder="Write your message here..."></textarea>
+                        </div>
+                        <div class="col-auto px-1 mt-2">
+                            <div class="row">
+                                <div class="col justify-content-center text-center">
+                                    <button class="btn btn-primary" id="id_btn_sendMessage">Send</button>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    <input type="checkbox" id="id_enterToSend" checked="checked"/>
+                                    <label for="id_enterToSend" >Enter to send</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 d-none flex-grow-1 flex-column" id="id_div_threadinfo">
+            <div class="row">
+                <div class="col">
+                    <h3 data-label="subject"></h3>
+                    <h4 data-label="related_object" data-escape="false"></h4>
+                    <h6>Started on <span data-label="started_timestamp" data-translator="prettyPrintDateTime"></span> by <span data-label="initiator" data-translator="linkedUserName" data-escape="false"></span></h6>
+                </div>
+            </div>
+            <div class="row" id="id_container_recipient_users">
+                <div class="col">
+                    <h5>Users in this conversation</h5>
+                    <div data-label="." data-translator="linkedUserProfilesList" data-escape="false"></div><br>
+                </div>
+            </div>
+            <div class="row d-none" id="id_container_recipient_groups">
+                <div class="col">
+                    <h5>Organizations in this conversation</h5>
+                    <p><i>Any member of these organizations may view or respond</i></p>
+                    <span data-label="recipient_groups" data-translator="linkedOrgList" data-escape="false"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade in" id="startNewConvoModal" tabindex="-1" role="dialog" aria-labelledby="startNewConvoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="startNewConvoModalLabel">Start new conversation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <form>
+                  <div class="form-row d-flex py-2">
+                      <div class="col flex-fill d-flex">
+                          <input type="text" placeholder="Subject" class="w-100" id="id_subject_input">
+                      </div>
+                  </div>
+                  <div class="form-row pt-2">
+                      <div class="col">
+                          <p>Choose recipients from your connections:</p>
+                      </div>
+                      <div class="col">
+                          <p>Choose recipients from organizations in your area:</p>
+                      </div>
+                  </div>
+                  <div class="form-row pb-2">
+                      <div class="col">
+                          <select class="form-control" name="choices-connections" id="choices-connections" multiple="multiple">
+                          </select>
+                      </div>
+                      <div class="col">
+                          <select class="form-control" name="choices-national-orgs" id="choices-national-orgs" multiple="multiple">
+                          </select>
+                      </div>
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Discard</button>
+            <button type="button" id="id_btn_startThread" class="btn btn-primary" data-dismiss="modal">Start conversation</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/messages_post.js' %}"></script>
+{% endblock %}

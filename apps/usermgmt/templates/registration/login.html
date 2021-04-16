@@ -1,0 +1,42 @@
+{% extends base_template_name %}
+{% block content %}
+{% load static %}
+  {% if form.errors %}
+    <p>Your username and password didn't match. Please try again.</p>
+  {% endif %}
+
+  {% if next %}
+    {% if user.is_authenticated %}
+      <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+    {% else %}
+      <p>Please login to see this page.</p>
+    {% endif %}
+  {% endif %}
+
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <div class="row form-row my-2 ml-3 mt-5 justify-content-center d-flex flex-row">
+      <div class="col-3 col-xl-2">
+        {{ form.username.label_tag }}
+        </div>
+      <div class="col-4 col-xl-3">
+        {{ form.username }}
+        </div>
+    </div>
+    <div class="row form-row my-2 ml-3 justify-content-center d-flex flex-row">
+
+        <div class="col-3 col-xl-2">{{ form.password.label_tag }}</div>
+        <div class="col-4 col-xl-3">{{ form.password }}</div>
+
+    </div>
+    <div class="row form-row my-3 ml-3 justify-content-center d-flex flex-row">
+      <div class="col-3 col-xl-2"><input class="btn btn-primary" type="submit" value="Login" /><input type="hidden" name="next" value="{{ next }}" /></div>
+      <div class="col-4 col-xl-3"><a href="/">Lost password?</a></div>
+    </div>
+
+  </form>
+
+
+
+{% endblock %}

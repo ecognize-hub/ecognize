@@ -1,0 +1,30 @@
+{% extends base_template_name %}
+{% load static %}
+{% block content %}
+<script type="text/javascript" src="{% static 'js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<link rel="stylesheet" property="stylesheet" href="{% static 'css/tempusdominus-bootstrap-4.min.css' %}"/>
+<script type="text/javascript" src="{% static 'js/newreport_base_pre.js' %}"></script>
+<div class="row no-gutters">
+    <div class="col">
+        <input type="hidden" id="id_mode" value="{{ mode }}">
+        <input type="hidden" id="id_report_id" value="{% if mode == "update" %}{{ report_id }}{% else %}-1{% endif %}">
+        <input type="hidden" id="id_type_str" value="{{ this_type }}">
+        <input type="hidden" id="id_authenticated" value="{{ authenticated }}">
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'report-create-choice' %}">Step 1 of 3: Choose report type</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Step 2 of 3: Create report</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Step 3 of 3: Upload images</a>
+            </li>
+        </ul>
+        <hr>
+    </div>
+</div>
+{% block newreportform %}
+{% endblock %}
+<script type="text/javascript" src="{% static 'js/newreport_base_post.js' %}"></script>
+{% endblock %}
